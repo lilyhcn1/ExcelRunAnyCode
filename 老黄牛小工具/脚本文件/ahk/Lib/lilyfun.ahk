@@ -177,8 +177,8 @@ getWebPage(url, postData := 0, headers := 0, method := 0)
 }
 
 ;通过文件创建文件夹，保证文件夹的存在
-creatfolderbyfile(filepath){
-filepath := StringReplace, filepath, "/","\"
+creatfolderbyfile(filepathold){
+StringReplace, filepath,filepathold,"/","\"
 StringMid, floderpath, filepath, 1, InStr(filepath,"\",,0)-1
 if !FileExist(floderpath){
   FileCreateDir, %floderpath%

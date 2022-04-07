@@ -1,0 +1,4 @@
+;!@Install@!UTF-8!
+Title="lily soft"
+InstallPath="e:\\"
+;!@InstallEnd@!

@@ -6,9 +6,7 @@
 
 现在的功能图片如下
 
-[](https://s2.loli.net/2022/04/07/oKxBdFgW1zsaCju.png)
-
-
+![功能图片](https://s2.loli.net/2022/04/07/oKxBdFgW1zsaCju.png)
 
 # 安装使用
 

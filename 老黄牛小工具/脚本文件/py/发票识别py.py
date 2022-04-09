@@ -55,9 +55,7 @@ def main():
     import base64
     import json
 
-    #sid = 'AKIDOcaHhqjLgkZ8QRCfrmPntiGXXGitIRJt'
-    #skey = 'LPCizzjCPLzMRGo55oFPIvHM9fvuc7MK'
-    
+ 
     sid=lilyfun.readini("ApiKeys","TencentfpId1")
     skey=lilyfun.readini("ApiKeys","TencentfpKey1")
     #cred = credential.Credential(appid, appkey)

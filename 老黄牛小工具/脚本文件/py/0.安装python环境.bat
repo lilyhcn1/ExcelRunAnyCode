@@ -26,7 +26,7 @@ pip install Converter -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-hos
 pip install util -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
 
 pip install sxtwl -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
-
+pip install pypinyin -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
 echo ^_^ 依赖环境安装完毕!~
 echo ^_^ 依赖环境安装完毕!~
 echo ^_^ 依赖环境安装完毕!~

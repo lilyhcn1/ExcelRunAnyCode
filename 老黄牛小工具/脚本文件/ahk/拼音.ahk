@@ -3,7 +3,7 @@
 #Include <lilyfun>
 SetWorkingDir %A_ScriptDir%
 
-jbname := "百度查快递" ;脚本的名字
+jbname := "拼音" ;脚本的名字
 fkeyold := ""   ;旧的文件的标题行名称
 fkeynew := ""   ;新的文件的标题行名称
 

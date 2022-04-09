@@ -13,36 +13,6 @@ returnfirstvalue(ByRef arr){
   return fv
 }
 
-; 函数：从json中的contents中读取键值
-readjsonconkey(ByRef key){
-  ;读取文件
-  FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
-  parsed := JSON.Load(jsonstr)
-  img1 := parsed["contents"][key]
-  return img1
-}
-
-
-;发送post信息并返回，这个非常复杂
-;url 是发送的url
-;fkeyold 是发送文件的信息，可为空
-;fkeynew 是接收文件的信息，可为空
-RelaceAndRun(){
- tempjsonpath := "d:\老黄牛小工具\ExcelQuery\temp\temp.json"
- tempjsonpath2 := "d:\老黄牛小工具\ExcelQuery\temp\temp2.json"
- 
-  ;-----------------正式的函数区----------------
-  ;读取文件
-  FileRead, jsonstr, %tempjsonpath%
-  ;msgbox % jsonstr
-  parsed := JSON.Load(jsonstr)
-  arr := parsed["contents"]
-  ;旧的文件路径，通常是文件模板
-   For index, value in arr["contents"]{
-     
-     
-  }
-}
 
 
 JsonToAHK(json, rec := false) {
@@ -88,41 +58,6 @@ FileRead, jsonstr, path
   return jsonstr
 }
 
-; 函数：get方式获取返回值
-savearr2json(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
-;构造excel需要的数组
-arr2 := []
-arr2["script"] := "ahk"
-arr2["w"] := wtype
-arr2["code"] := code
-
-arr2["contents"] := arr
-;将构造好的数组写入文本
-stringified := JSON.Dump(arr2,, 4)
-FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
-FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
-
-}
-
-
-; 函数：get方式获取返回值
-readini(ByRef sec,ByRef key){
-myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"
-if FileExist(myconinifile){
-  IniRead, inival, %myconinifile%, %sec%, %key%
-  
-  if(inival ="ERROR"){
-      msgbox , %myconinifile% 中的相关配置不存在，请确保【 %sec% 】节中的 %key% 存在！~
-
-  }else if(inival =""){
-    msgbox , 请在 D:\老黄牛小工具\配置文件\myconf.ini 中填写\n在【 %sec% 】节中的 %key% 的值
-  }
-}else{
-    msgbox , %myconinifile% 这个文件不存在，请创建后再试！
-}
- return inival
-}
-
 ; 函数：删除并写入文件
 writetext(ByRef str,ByRef path){
 FileDelete, %path%
@@ -154,20 +89,8 @@ readFile(File){
 	B64Data := Base64Enc(Bin, nBytes)
 	return B64Data
 }
+
 getserverurl(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
-
-IniRead, server1, %myconinifile%, ApiServer, server1
-
-if(server1 ="ERROR"){
-     msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
-}else{
-      server := server1
-}
-
-return server
-}
-
-getserverurl2(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
 
 if FileExist(myconinifile){
 IniRead, server1, %myconinifile%, ApiServer, server1
@@ -183,11 +106,9 @@ if(server1 ="ERROR"){
       server := server2
     }
   }
+}else{
+  msgbox , %myconinifile% 这个文件不存在，请创建后再试！
 }
-if( server=""){
-   msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
-}
-
 
 return server
 
@@ -218,8 +139,8 @@ getWebPage(url, postData := 0, headers := 0, method := 0)
 }
 
 ;通过文件创建文件夹，保证文件夹的存在
-creatfolderbyfile(filepathold){
-StringReplace, filepath,filepathold,"/","\"
+creatfolderbyfile(filepath){
+filepath := StringReplace, filepath, "/","\"
 StringMid, floderpath, filepath, 1, InStr(filepath,"\",,0)-1
 if !FileExist(floderpath){
   FileCreateDir, %floderpath%
@@ -227,68 +148,6 @@ if !FileExist(floderpath){
 
 }
 
-
-
-
-
-
-;发送post信息并返回，这个非常复杂
-;url 是发送的url
-;fkeyold 是发送文件的信息，可为空
-;fkeynew 是接收文件的信息，可为空
-PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
- tempjsonpath := "d:\老黄牛小工具\ExcelQuery\temp\temp.json"
- tempjsonpath2 := "d:\老黄牛小工具\ExcelQuery\temp\temp2.json"
- 
-  ;-----------------正式的函数区----------------
-  ;读取文件
-  FileRead, jsonstr, %tempjsonpath%
-
-  parsed := JSON.Load(jsonstr)
-  ;旧的文件路径，通常是文件模板
-  if(fkeyold <> ""){
-    mbpath := parsed["contents"][fkeyold]
-  }
-  ;新的文件路径，通常是生成的文件，可以是相对路径
-  if(fkeynew <> ""){   
-    nowpath := parsed["excelpath"]
-    genfname := parsed["contents"][fkeynew]
-    if(InStr(genfname,":")){
-      newfilepath := genfname 
-    }else{
-      newfilepath := nowpath  "\"  genfname 
-    }
-  }
-
-
-
-
-  ;读取文件
-  if(mbpath <> ""){
-    f64 :=readFile(mbpath)
-  }else{
-    f64 := ""
-  }
-
-  JsonData := {"json64": readFile(tempjsonpath)
-          , "f64": f64			 
-        , "fkeyold": fkeyold
-        , "fkeynew": fkeynew			 }
-           
-  ;发送编码后的base64字段
-  result := getWebPage(url,JsonData)
-
-  data := JSON.Load(result)
-  ;jsontemparr := JSON.Load(data.json64)
-
-  ;将读取到base64字符解码后写入文件
-  writeBase64File(tempjsonpath,data.json64)
-
-  if(newfilepath <> ""){
-    creatfolderbyfile(newfilepath)
-    writeBase64File(newfilepath,data.f64)
-  }
-}
 
 
 Base64Enc( ByRef Bin, nBytes, LineLength := 64, LeadingSpaces := 0 ) { ; By SKAN / 18-Aug-2017
@@ -316,3 +175,66 @@ Base64Dec( ByRef B64, ByRef Bin ) {  ; By SKAN / 18-Aug-2017
 				, "Ptr",&Bin, "UIntP",Rqd, "Int",0, "Int",0 )
 	return Rqd
 }
+
+
+;发送post信息并返回，这个非常复杂
+;url 是发送的url
+;fkeyold 是发送文件的信息，可为空
+;fkeynew 是接收文件的信息，可为空
+PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
+ tempjsonpath := "d:\老黄牛小工具\ExcelQuery\temp\temp.json"
+ tempjsonpath2 := "d:\老黄牛小工具\ExcelQuery\temp\temp2.json"
+ 
+  ;-----------------正式的函数区----------------
+  ;读取文件
+  FileRead, jsonstr, %tempjsonpath%
+  ;msgbox % jsonstr
+  parsed := JSON.Load(jsonstr)
+  ;旧的文件路径，通常是文件模板
+  if(fkeyold <> ""){
+    mbpath := parsed["contents"][fkeyold]
+  }
+  ;新的文件路径，通常是生成的文件，可以是相对路径
+  if(mbpath <> ""){   
+    nowpath := parsed["excelpath"]
+    genfname := parsed["contents"][fkeynew]
+    if(InStr(genfname,":")){
+      newfilepath := genfname 
+    }else{
+      newfilepath := nowpath  "\"  genfname 
+    }
+  }
+
+
+  ;msgbox % newfilepath
+  ;TrayTip,,% newfilepath
+  ;Sleep % 500
+  ;读取文件
+  if(mbpath <> ""){
+    f64 :=readFile(mbpath)
+  }else{
+    f64 := ""
+  }
+
+  JsonData := {"json64": readFile(tempjsonpath)
+          , "f64": f64			 
+        , "fkeyold": fkeyold
+        , "fkeynew": fkeynew			 }
+           
+  ;发送编码后的base64字段
+  result := getWebPage(url,JsonData)
+  ;msgbox % result
+  data := JSON.Load(result)
+  ;jsontemparr := JSON.Load(data.json64)
+
+  ;将读取到base64字符解码后写入文件
+  writeBase64File(tempjsonpath,data.json64)
+
+  if(newfilepath <> ""){
+    creatfolderbyfile(newfilepath)
+    writeBase64File(newfilepath,data.f64)
+  }
+}
+
+
+

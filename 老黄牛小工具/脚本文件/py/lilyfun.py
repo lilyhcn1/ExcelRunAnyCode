@@ -166,6 +166,10 @@ def test():
 
 
 #把相对路径转成绝对路径
+def getwnewfilepath(output1,listarr):
+    return 11
+
+#把相对路径转成绝对路径
 #raltiveapth 相对路径
 #folder 文件夹
 def getwholepath(raltiveapth,folder):

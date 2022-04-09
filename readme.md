@@ -4,7 +4,7 @@
 
 也可以直接查看https://r34.cc/jb
 
-现在的功能图片如下
+现在的功能图片如下:
 
 ![功能图片](https://s2.loli.net/2022/04/07/oKxBdFgW1zsaCju.png)
 

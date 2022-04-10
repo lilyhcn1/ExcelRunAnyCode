@@ -9,7 +9,7 @@ temparr := []
   BaiduSecretKey1 := readini("ApiKeys","BaiduSecretKey1")
 
 try{
-  ;读取文件1
+  ;读取文件
   FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
   parsed := JSON.Load(jsonstr)
   ;fv := returnfirstvalue(parsed["contents"])
@@ -29,9 +29,14 @@ try{
   temparr["运行结果"] :="哪个地方出错了，请注意！"
 }
 
-
+n=0
 for k,v in JSON.Load(ret).words_result{
-  temparr["识别结果"] := temparr["识别结果"]  v.words "`n"
+  if(n=0){
+  temparr["识别结果"] :=  v.words
+  }else{
+  temparr["识别结果"] :=  temparr["识别结果"] "`n" v.words
+  }
+n=n+1
 }
 
 

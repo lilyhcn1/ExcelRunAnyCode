@@ -14,9 +14,18 @@ if (img1 != ""){  ;正常运行
     ocr:=new bdocr(BaiduAPIKey1, BaiduSecretKey1)
     ;ret:=ocr.GetOcr(A_ScriptDir "\3.png","accurate_basic")	; 高精度识别
     ret:=ocr.GetOcr(img1,"general_basic")							; 普通精度识别
-  for k,v in JSON.Load(ret).words_result{
-    temparr["识别结果"] := temparr["识别结果"]  v.words "`n"
+
+n=0
+for k,v in JSON.Load(ret).words_result{
+  if(n=0){
+  temparr["识别结果"] :=  v.words
+  }else{
+  temparr["识别结果"] :=  temparr["识别结果"] "`n" v.words
   }
+n=n+1
+}  
+  
+ 
 }else{  ;出错后的处理
 
     temparr["图片地址"] :="D:\老黄牛小工具\ExcelQuery\temp\temp.jpg"

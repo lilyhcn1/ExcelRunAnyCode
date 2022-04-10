@@ -9,7 +9,7 @@ temparr := []
   BaiduSecretKey1 := readini("ApiKeys","BaiduSecretKey1")
 
 try{
-  ;读取文件
+  ;读取文件1
   FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
   parsed := JSON.Load(jsonstr)
   ;fv := returnfirstvalue(parsed["contents"])

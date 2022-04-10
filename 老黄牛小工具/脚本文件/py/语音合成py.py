@@ -32,9 +32,6 @@ def get_mp3_duration(audio_path):
     return "{:.1f}".format(xx.info.time_secs)
  
 
-secret_id = "AKIDsa2D7k6B0XnlUx83h4B2buwg9MIxLRHq"  # 您腾讯云账号的id， 请自行输入
-secret_key = "KM8droUt0rRloZ3HEafT0GEvMbZHjuoR"  # 您腾讯云账号的key，请自行输入
- 
  
 def get_string_to_sign(method, endpoint, params):
     s = method + endpoint + "/?"
@@ -48,7 +45,7 @@ def sign_str(key, s, method):
  
  
 # 保存成文件
-def save_audio_file(rsp_dic):
+def save_audio_file(rsp_dic,file_path):
     # 传回的音频, 是base64, 也就是一种用64个字符来表示任意二进制数据的方法（8bit）
     audio_txt = rsp_dic["Response"]["Audio"]
     base64_to_file(audio_txt, file_path)
@@ -62,8 +59,62 @@ def base64_to_file(base64_txt, file_path):
     print("saved:"+file_path)
  
  
-# 官方的权限验证、以及调用接口的参数
-def test_2_offical():
+
+
+
+
+#---------------r34.cc制作----------------------------------
+import lilyfun  #导入同路径下的函数
+import os
+from goto import with_goto
+prstr="true" #是否打印输出
+
+
+#输入区
+input1="文本"
+#输出区
+output1="语音路径"
+output2="语音时长"
+exeinfo="执行结果"
+
+
+@with_goto
+def main():
+    arr={}
+    arr2save={}
+
+
+    #----------------1.初始化读取数据----------------------
+
+    #初始化读取数据
+    try:
+        listarr=lilyfun.readjson()
+    except:
+        arr2save["执行结果"]="readjson出错了。"
+        goto.error
+    if input1 in listarr.keys(): #对应第一个输入
+        arr2save["执行结果"]="标题行不包括"+ input1+"."
+        img1=listarr[input1]
+    else:
+        goto.error
+        
+    #读取输入路径，处理异常 
+    excelpath=lilyfun.readjson("excelpath")
+    #old_file=lilyfun.getwholepath(listarr[input1],excelpath) #相对路径
+    if output1 in listarr.keys() : #对应第一个输入
+        if not listarr[output1] =="":
+            new_file=lilyfun.getwholepath(listarr[output1],excelpath) #相对路径
+            if(os.path.isfile(new_file)):     
+                os.remove(new_file)
+            lilyfun.mkdir(new_file)  #保证目录的存在
+    #print(old_file+"=>"+new_file)
+
+    #----------------2.数据提交并返回数组-------------------
+    secret_id=lilyfun.readini("ApiKeys","TencentfpId1")
+    secret_key=lilyfun.readini("ApiKeys","TencentfpKey1")
+
+
+
     endpoint = "tts.tencentcloudapi.com"
     data = {
         'Action': 'TextToVoice',
@@ -84,6 +135,8 @@ def test_2_offical():
         'Timestamp': int(time.time()),
         'Version': '2019-08-23',
     }
+
+
     s = get_string_to_sign("GET", endpoint, data)
     data["Signature"] = sign_str(secret_key, s, hashlib.sha1)
     #print(data["Signature"])
@@ -94,60 +147,33 @@ def test_2_offical():
     # 输出一下返回
     #print(resp.json())
     # 保存返回的音频数据
-    save_audio_file(resp.json())
- 
-
-#输入区
-input1="文本"
-#输出区
-output1="语音路径"
-output2="语音时长"
-exeinfo="执行结果"
+    save_audio_file(resp.json(),new_file)
 
 
-@with_goto
-def main():
-    arr={}
     arr2save={}
-    #----------------1.初始化读取数据----------------------
+    #arr2save['语音路径']=new_file
+    arr2save['语音时长']=get_mp3_duration(new_file)
 
-    #初始化读取数据
-    try:
-        listarr=lilyfun.readjson()
-    except:
-        arr2save["执行结果"]="readjson出错了。"
-        goto.error
-    if input1 in listarr.keys(): #对应第一个输入
-        arr2save["执行结果"]="标题行不包括"+ input1+"."
-        img1=listarr[input1]
-    else:
-        goto.error
+    #----------------3.正确时的返回值-------------------
 
+    arr2save[exeinfo]="√"
+    lilyfun.savearr2json(arr2save,"key")
+    
+    lilyfun.pr("正确执行结束",prstr)
+    goto.end
+    label.error
+    #----------------4. 出错时的返回值-------------------
+    arr2save[input1]="老黄牛小工具"
+    arr2save[output1]="生成文件夹\老黄牛小工具.mp3"
+    s="执行:“"+os.path.basename(__file__)+"”出错。"
 
+    
+    arr2save=lilyfun.arrstr(arr2save,exeinfo,s)
+    lilyfun.savearr2json(arr2save,"all")
+    #print(arr2save)
+    lilyfun.pr("Warning,执行结束但有错误！~",prstr)
+    label.end
 
-import lilyfun  #导入同路径下的函数
-#----------------1.初始化读取数据----------------------
-arr={}
-#初始化读取数据
-listarr=lilyfun.readjson()
-img1=listarr['文本']
-img2=""
-nowpath=lilyfun.readjson('excelpath')
-#fv=firstval(listarr)
-print(img1 +"--"+ img2)
-#----------------2.数据提交并返回数组-------------------
-file_path = nowpath+ "\\" +  img1 + ".mp3"
-
-
- 
-if __name__ == "__main__":
-    print("Start TTS ....")
-    test_2_offical()
-
-
-arr2save={}
-arr2save['语音路径']=file_path
-arr2save['语音时长']=get_mp3_duration(file_path)
-
-#----------------3.数据写入json文件-------------------
-lilyfun.savearr2json(arr2save,"key")
+    
+        
+main()

@@ -67,6 +67,27 @@ def readjson(key="contents"):
 
 
 
+#这里替换成常用函数
+def arr2dict(arr2):
+    n=0
+    i=0
+    k={}
+    dictarr={}
+    dictarrs={}
+    for arr1 in arr2:
+        i=0
+        for arrval in arr1:
+            #print(arrval)
+            if n==0:
+                k[i]=arrval
+            else:
+                dictarr[k[i]]=arrval
+            i=i+1
+        dictarrs[n]=dictarr
+        n=n+1
+
+    return dictarrs
+
 
 def firstval(arr):
     for index in arr:

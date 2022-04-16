@@ -13,6 +13,41 @@ returnfirstvalue(ByRef arr){
   return fv
 }
 
+
+
+
+
+;把路径改为绝对路径
+getwholepath(ByRef raltiveapth,ByRef folder :=""){
+  ;读取文件
+if(folder=""){
+  FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+  parsed := JSON.Load(jsonstr)
+  folder := parsed["excelpath"]
+}
+
+if (InStr(raltiveapth, ":")){
+  new_file := raltiveapth
+
+}else{
+  new_file := folder "\" raltiveapth
+}
+return new_file
+}
+ 
+
+; 函数：arr读取键值
+getarrkey(ByRef arr,ByRef k1,ByRef k2){
+if(k1=""){
+val := arr[k2]
+}else{
+val :=arr[k1][k2]
+}
+return val
+
+}
+
+
 ; 函数：从json中的contents中读取键值
 readjsonconkey(ByRef key){
   ;读取文件

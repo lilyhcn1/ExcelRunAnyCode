@@ -16,6 +16,19 @@
 
 1. 请安装office2007版本以后，或者安装WPS并安装宏组件。
 2. 请将“老黄牛小工具”解压到d盘，保证目录为 d:\老黄牛小工具\ExcelQuery
+3. 建议安装表格插件，这样任何的普通表都可以使用这些功能了。安装插件方式如下：
+
+![CbC5KCWHN1.gif](https://s2.loli.net/2022/04/21/YsuHiFM3kgPLRm8.gif)
+
+4. 添加功能
+
+   ![RGGYrlto6X.gif](https://s2.loli.net/2022/04/21/h6FLPbBCpjwoi53.gif)
+
+   
+
+5. 使用功能
+
+   ![ybfaO9Mdwl.gif](https://s2.loli.net/2022/04/21/VOxja9snv6qr5HK.gif)
 
 
 

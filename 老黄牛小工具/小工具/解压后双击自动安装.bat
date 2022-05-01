@@ -1,3 +1,22 @@
+@ECHO OFF
+REM  QBFC Project Options Begin
+REM  HasVersionInfo: No
+REM Companyname: 
+REM Productname: 
+REM Filedescription: 
+REM Copyrights: 
+REM Trademarks: 
+REM Originalname: 
+REM Comments: 
+REM Productversion:  0. 0. 0. 0
+REM Fileversion:  0. 0. 0. 0
+REM Internalname: 
+REM ExeType: consoleold
+REM Architecture: x86
+REM Appicon: r34.ico
+REM AdministratorManifest: No
+REM  QBFC Project Options End
+@ECHO ON
 @echo off
 SET r34tool=老黄牛小工具
 SET r34toolpath=d:\%r34tool%
@@ -29,5 +48,10 @@ if exist %r34tool% (
 )
 
 @echo  ----------------
+@echo 您可以运行“主控制文件.xlsm”来实现各种功能。
+@echo 您也可以安装插件来使用。
+@echo 教程地址： https://r34.cc/
+choice /t 5 /d y /n >nul
+start  主控制文件.xlsm
 @echo 等待9秒后自动关闭。
 choice /t 9 /d y /n >nul

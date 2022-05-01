@@ -41,17 +41,17 @@ if exist %r34tool% (
    @echo 相关辅助文件安装完毕。
    @echo 相关辅助文件安装完毕。
    @echo 相关辅助文件安装完毕。
-   
+
+   @echo  ----------------
+   @echo 教程地址： https://r34.cc/
+   @echo 5秒后启动主控制文件。
+   choice /t 5 /d y /n >nul
+   start  主控制文件.xlsm
    
 ) else (
   @echo "文件夹不存在，请解压后再运行。"
 )
 
-@echo  ----------------
-@echo 您可以运行“主控制文件.xlsm”来实现各种功能。
-@echo 您也可以安装插件来使用。
-@echo 教程地址： https://r34.cc/
-choice /t 5 /d y /n >nul
-start  主控制文件.xlsm
+
 @echo 等待9秒后自动关闭。
 choice /t 9 /d y /n >nul

@@ -56,7 +56,7 @@ def readjson(key="contents"):
         ct = f.read()
         if ct.startswith(u'\ufeff'):
             ct = ct.encode('utf8')[3:].decode('utf8')
-            ct = ct.replace('\\','\\\\')
+            #ct = ct.replace('\\','\\\\')
     jsonarr = json.loads(ct)
     #print(key in jsonarr.keys())
     if key in jsonarr.keys():
@@ -64,6 +64,27 @@ def readjson(key="contents"):
     else:
         listarr=jsonarr
     return listarr
+
+
+#读取json数据
+def readjsonarr(key,key2=""):
+    #print(key+"--"+key2)
+    listarr={}
+    with open(JSONFILE,'r',encoding='utf8') as f:
+        ct = f.read()
+        if ct.startswith(u'\ufeff'):
+            ct = ct.encode('utf8')[3:].decode('utf8')
+            #ct = ct.replace('\\','\\\\')
+    jsonarr = json.loads(ct)
+    #print(jsonarr)
+    #print(jsonarr["contents"])
+    #print(key in jsonarr.keys())
+    
+    if key2=="":
+        return jsonarr[key]
+    else:
+        return jsonarr[key][key2]
+
 
 
 
@@ -119,6 +140,15 @@ def arrstr(arr,key,s=""):
     else:
         arr[key]=s
         return arr
+
+""" 新增执行结果并保存到json """
+def saveerr2json(arr,s="",key="执行结果",):
+    arr[key]=s
+    savearr2json(arr,"all")
+    print("函数savearr2json print: "+s)
+    return arr
+    
+    
 
 def sysargvandjson(keyword="webppath",inputstr=""):
     inputpatharr={}

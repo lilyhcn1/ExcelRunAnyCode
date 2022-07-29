@@ -50,12 +50,13 @@ if exist %r34tool% (
 choice /t 1 /d y /n >nul
 rem set /p var=是否安装AutoHotKey,默认y：
 if "%var%"=="y" (
-  regedit /s D:\老黄牛小工具\小工具\ahk工具\注册ahk.reg
   @echo ---------------------------------------------------
-  @echo AutoHotKey安装完毕！！
+  @echo 请手动确认导入注册表！~
+  start D:\老黄牛小工具\小工具\ahk工具\注册ahk.reg
+  @echo -- AutoHotKey安装完毕！！
 )
 
-choice /t 1 /d y /n >nul
+choice /t 9 /d y /n >nul
 @echo ---------------------------------------------------
 @echo 教程地址： https://r34.cc/
 @echo 教程地址： https://r34.cc/

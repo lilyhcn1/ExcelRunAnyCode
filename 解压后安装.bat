@@ -1,4 +1,5 @@
 @ECHO OFF
+rem github更新时一定要注意换行符，否则会出错
 REM  QBFC Project Options Begin
 REM  HasVersionInfo: No
 REM Companyname: 

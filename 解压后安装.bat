@@ -52,11 +52,11 @@ rem set /p var=是否安装AutoHotKey,默认y：
 if "%var%"=="y" (
   @echo ---------------------------------------------------
   @echo 请手动确认导入注册表！~
-  start D:\老黄牛小工具\小工具\ahk工具\注册ahk.reg
+  regedit /s D:\老黄牛小工具\小工具\ahk工具\注册ahk.reg
   @echo -- AutoHotKey安装完毕！！
 )
 
-choice /t 9 /d y /n >nul
+choice /t 1 /d y /n >nul
 @echo ---------------------------------------------------
 @echo 教程地址： https://r34.cc/
 @echo 教程地址： https://r34.cc/
@@ -64,8 +64,7 @@ choice /t 9 /d y /n >nul
 
 choice /t 1 /d y /n >nul
 @echo ---------------------------------------------------
-rem set /p var=是否打开控制文件？默认y：
-@echo 3秒后打开主控制文件。
+@echo 准备打开控制文件
 choice /t 3 /d y /n >nul
 if "%var%"=="y" (
   start  %r34toolpath%\主控制文件.xlsm

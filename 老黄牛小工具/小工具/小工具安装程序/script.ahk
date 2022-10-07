@@ -105,6 +105,9 @@ sleep % 3000
 if(c3=1){
 ; c2安装插件
 sleep % 3000
+FileCopyDir, %scriptpath%\老黄牛小工具\Excel插件,%AppData%\Microsoft\AddIns , 1
+
+
 xllpath := checkandgetpath("xll")
 SplitPath, xllpath, name, dir, ext, name_no_ext, drive
 vbspath = %dir%\安装插件.vbs

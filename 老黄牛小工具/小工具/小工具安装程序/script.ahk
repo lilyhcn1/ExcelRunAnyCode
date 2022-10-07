@@ -91,7 +91,7 @@ if FileExist(floderpath){
   FileCopyDir, %scriptpath%\老黄牛小工具, %floderpath% , 1
 }
 ;安装autohotkey程序
- runwait,regedit /s %floderpath%\小工具\ahk工具\注册ahk.reg
+ runwait,regedit /s %floderpath%\小工具\小工具安装程序\注册ahk.reg
 
 }
 

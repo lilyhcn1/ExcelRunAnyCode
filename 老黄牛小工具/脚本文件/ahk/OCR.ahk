@@ -1,85 +1,15 @@
-#SingleInstance, Force
+ï»¿#SingleInstance, Force
 #Include <JSON>
 #Include <lilyfun>
 SetWorkingDir %A_ScriptDir%
-;-------------0.ÒıÓÃº¯Êı----------
-arr2 := []
+SplitPath, A_ScriptName, name, dir, ext, name_no_ext, drive
+jbname := name_no_ext ;è„šæœ¬çš„åå­—ç­‰äºæ–‡ä»¶å
 
-;BaiduSecretKey1 := readini("ApiKeys","BaiduSecretKey1")
-input1 :="Í¼Æ¬Â·¾¶"
-;input2 := "Êä³öÍ¼Æ¬"
-;input3 := "x"
-;input4 := "y"
-;input5 := "w"
-;input6 := "h"
-;input3 := "·¢ËÍÎÄ¼ş"
-output1 :="Ê¶±ğ½á¹û"
-info := "ÔËĞĞ½á¹û"
-val1 := readjsonconkey(input1)
-val2 := readjsonconkey(input2)
-val3 := readjsonconkey(input3)
-val4 := readjsonconkey(input4)
-val5 := readjsonconkey(input5)
-val6 := readjsonconkey(input6)
-;-------------1.¶ÁÈ¡ÊäÈë±äÁ¿----------
-if (val1 != "" ){  ;Õı³£ÔËĞĞ
+fkeyold := "å›¾ç‰‡åœ°å€"   ;è¦å‘é€çš„æ—§æ–‡ä»¶çš„æ ‡é¢˜è¡Œåç§°
+fkeynew := ""   ;è¦æ¥æ”¶çš„æ–°æ–‡ä»¶çš„æ ‡é¢˜è¡Œåç§°
 
-main()
-;FileRead, jsonstr, D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\temp\temp.txt,utf-8
-jsonstr := utf8readtext("D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\ExcelQuery\temp\temp.txt")
-;msgbox % jsonstr
-arr2[output1] := jsonstr
-arr2[info] :="¡Ì"
-
-}else{  ;³ö´íºóµÄ´¦Àí
-    arr2[input1] := "D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\wordÄ£°å\´ı²Ã¼ôÍ¼Æ¬.jpg"
-    ;arr2[input2] := "D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\temp\temp.jpg"
-    ;arr2[input3] := "500"
-    ;arr2[input4] := "60"
-    ;arr2[input5] := "225"
-    ;arr2[input6] := "55"
-    arr2[output1] := "´ı·µ»Ø"            
-    
-    arr2[info] := "±êÌâĞĞÕÒ²»µ½¹Ø¼ü´Ê¡¾" input1 "¡¿»òÎª¿Õ£¬Çë¼ì²é¡£"
-}
-
-;-------------2.×îÖÕĞ´Èë±äÁ¿----------
-savearr2json(arr2)
-
-main(){
-;------------------------
-;ÒıÈë±äÁ¿
-global val1,val2,val3,val4,val5,val6
-;-----------ÒıÓÃ±äÁ¿-------------
-tesseract := "D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\Ğ¡¹¤¾ß\TesseractOCR\tesseract.exe"
-runstr := tesseract " " val1 "  D:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\ExcelQuery\temp\temp -l chi_sim"
-
-RunWait, %runstr%,,min
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+;å‘é€postä¿¡æ¯å¹¶è¿”å›ï¼Œè¿™ä¸ªéå¸¸å¤æ‚,ä¸ºæ ¸å¿ƒä¸»æ–‡ä»¶å‡½æ•°åœ¨lilyfuné‡Œ
+apiserver := getserverurl()
+url := apiserver "/jb/" jbname
+PostCsvAndFile(url,fkeyold,fkeynew)
 

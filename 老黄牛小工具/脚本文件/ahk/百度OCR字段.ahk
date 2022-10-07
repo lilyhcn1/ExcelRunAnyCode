@@ -17,13 +17,7 @@ if (img1 != ""){  ;Õý³£ÔËÐÐ
 
 n := 1
 for k,v in JSON.Load(ret).words_result{
-if (n<10){
-kk := "×Ö¶Î0" n
-}else{
 kk := "×Ö¶Î" n
-}
-
-
 ;msgbox % kk
 temparr[kk] :=  v.words
 n := n+1
@@ -34,15 +28,15 @@ n := n+1
 }else{  ;³ö´íºóµÄ´¦Àí
 
     temparr["Í¼Æ¬µØÖ·"] :="D:\ÀÏ»ÆÅ£Ð¡¹¤¾ß\ExcelQuery\temp\temp.jpg"
-  temparr["×Ö¶Î01"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î02"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î03"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î04"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î05"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î06"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î07"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î08"] :="´ý·µ»Ø"
-  temparr["×Ö¶Î09"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î1"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î2"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î3"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î4"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î5"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î6"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î7"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î8"] :="´ý·µ»Ø"
+  temparr["×Ö¶Î9"] :="´ý·µ»Ø"
   temparr["×Ö¶Î10"] :="´ý·µ»Ø"
   temparr["×Ö¶Î11"] :="´ý·µ»Ø"
   temparr["×Ö¶Î12"] :="´ý·µ»Ø"

@@ -57,19 +57,20 @@ path5 = %excelpath%\output\%path%
 
 if FileExist(path){
     pathnew := path
+    run,%pathnew%
 }else if FileExist(path2){
     pathnew := path2
+    run,%pathnew%
 }else if FileExist(path3){
     pathnew := path3
+    run,%pathnew%
 }else if FileExist(path4){
     pathnew := path4
+    run,%pathnew%
 }else if FileExist(path5){
     pathnew := path5
+    run,%pathnew%
 }
-if FileExist(pathnew){
-  run,"D:\老黄牛小工具\脚本文件\vbs\打印wordvbs.vbs " %pathnew%
-}
-
 if (InStr(path, "http")){
   run,%path%
 }

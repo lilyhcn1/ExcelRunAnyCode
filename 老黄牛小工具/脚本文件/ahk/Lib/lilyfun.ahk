@@ -119,10 +119,26 @@ geturlcontent(ByRef url){
 
 ; 函数：get方式获取返回值
 readtext(ByRef path){
-FileRead, jsonstr, path
-  return jsonstr
+FileRead, t, *P936 %path%  
+
+  return t
 }
 
+;气泡提示
+tr(ByRef s){
+  TrayTip #1, %s%
+}
+; 函数：get方式获取返回值
+utf8readtext(ByRef path){
+FileRead, t, *P65001 %path%
+  return t
+}
+
+readtext2(File){
+	FileGetSize, nBytes, %File%
+	FileRead, Bin, *c %File%
+	return Bin
+}
 ; 函数：get方式获取返回值
 savearr2json(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
 ;构造excel需要的数组
@@ -163,12 +179,21 @@ writetext(ByRef str,ByRef path){
 FileDelete, %path%
 ;TrayTip %path%, "path"
 ;TrayTip %str%, "str"
-FileAppend,%str%,%path%,utf-8
+FileAppend,%str%,%path%,UTF-8-RAW
 ;run,%path%
 
 }
 
+;把字符串写到记事本中，方便复制
+startstr(ByRef str){
+path :="d:\老黄牛小工具\ExcelQuery\temp\temp.txt"
+FileDelete, %path%
+;TrayTip %path%, "path"
+;TrayTip %str%, "str"
+FileAppend,%str%,%path%,utf-8
+run,%path%
 
+}
 
 writeBase64File(fileName,base64Data){
 	nBytes := Base64Dec( base64Data, Bin )
@@ -200,6 +225,63 @@ if(server1 ="ERROR"){
 }
 
 return server
+}
+
+;获取文件的路径
+checkandgetpath(exename){
+exefolder = D:\老黄牛小工具\小工具
+site = http://pub.r34.cc/toolsoft
+
+if (exename = "ffmpeg"){
+  path = %exefolder%\ffmpeg.exe
+  url = %site%/ffmpeg.zip
+}else if(exename = "nconvert"){
+  path = %exefolder%\缩小图片nconvert\nconvert.exe
+  url = %site%/nconvert.zip
+}else if(exename = "notepad2"){
+  path = %exefolder%\Notepad2\Notepad2.exe
+  url = %site%/Notepad2.zip
+}else if(exename = "realesrgan"){
+  path = %exefolder%\realesrgan\realesrgan-ncnn-vulkan.exe
+  url = %site%/realesrgan.zip
+}else if(exename = "cpdf"){
+  path = %exefolder%\pdf\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "PDFEdit"){
+  path = %exefolder%\PDFEdit\%exename%.exe
+  url = 
+}else if(exename = "xll"){
+  path = %AppData%\Microsoft\AddIns\老黄牛工具-64位.xll
+  url = %site%/%exename%.zip
+}else if(exename = "RunAny"){
+  path = D:\老黄牛小工具\RunAny\%exename%.exe
+  url = %site%/%exename%.zip
+}
+
+if not FileExist(path){
+    if (url =""){
+        MsgBox, 暂无网址，请自行上网下载。
+        ExitApp 
+    }
+    MsgBox, 4, r34小工具 , 接下来即将安装%exename%软件到%path%。
+    IfMsgBox, No
+        ExitApp 
+     
+      creatfolderbyfile(path)
+      SplitPath, path, name, dir, ext, name_no_ext, drive
+      zippath = %dir%\temp.zip
+      DownloadFile( url, zippath)
+      
+      SmartZip(zippath,dir)
+      FileDelete, %zippath% 
+}
+
+if not FileExist(path){
+    msgbox , %path% 不存在，请自行下载。
+    path := ""
+    ExitApp 
+}
+return path
 }
 
 getserverurl2(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
@@ -252,18 +334,118 @@ getWebPage(url, postData := 0, headers := 0, method := 0)
     Return whr.ResponseText
 }
 
+
+DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, ExpectedFileSize := 0) {
+    ;Check if the file already exists and if we must not overwrite it
+    If (!Overwrite && FileExist(SaveFileAs))
+        Return
+    ;Check if the user wants a progressbar
+    If (UseProgressBar) {
+        ;Initialize the WinHttpRequest Object
+        WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        ;Download the headers
+        WebRequest.Open("HEAD", UrlToFile)
+        WebRequest.Send()
+
+        try {
+            ;Store the header which holds the file size in a variable:
+            FinalSize := WebRequest.GetResponseHeader("Content-Length")
+        } catch e {
+            ; Cannot get "Content-Length" header
+            FinalSize := ExpectedFileSize
+        }
+
+        ;Create the progressbar and the timer
+        Progress, , , Downloading..., %UrlToFile%
+
+        LastSizeTick := 0
+        LastSize := 0
+
+        ; Enable progress bar updating if the system knows file size
+        SetTimer, __UpdateProgressBar, 1500
+    }
+
+    ;Download the file
+    UrlDownloadToFile, %UrlToFile%, %SaveFileAs%
+    ;Remove the timer and the progressbar because the download has finished
+    If (UseProgressBar) {
+        Progress, Off
+        SetTimer, __UpdateProgressBar, Off
+    }
+    Return
+
+    ;The label that updates the progressbar
+    __UpdateProgressBar:
+        ;Get the current filesize and tick
+        CurrentSize := FileOpen(SaveFileAs, "r").Length ;FileGetSize wouldn't return reliable results
+        CurrentSizeTick := A_TickCount
+
+        ;Calculate the downloadspeed
+        SpeedOrig  := Round((CurrentSize/1024-LastSize/1024)/((CurrentSizeTick-LastSizeTick)/1000))
+
+        SpeedUnit  := "KB/s"
+        Speed      := SpeedOrig
+
+        if (Speed > 1024) {
+            ; Convert to megabytes
+            SpeedUnit := "MB/s"
+            Speed := Round(Speed/1024, 2)
+        }
+
+        SpeedText := Speed . " " . SpeedUnit
+
+        ;Save the current filesize and tick for the next time
+        LastSizeTick := CurrentSizeTick
+        LastSize := FileOpen(SaveFileAs, "r").Length
+
+        if FinalSize = 0
+        {
+            PercentDone := 50
+        } else {
+            ;Calculate percent done
+            PercentDone := Round(CurrentSize/FinalSize*100)
+            SpeedText := SpeedText . ", " . Round((FinalSize - CurrentSize) / SpeedOrig / 1024) . "s left"
+        }
+
+        ;Update the ProgressBar
+        Progress, %PercentDone%, %PercentDone%`% (%SpeedText%), Downloading..., Downloading %SaveFileAs% (%PercentDone%`%)
+    Return
+}
+
+
 ;通过文件创建文件夹，保证文件夹的存在
 creatfolderbyfile(filepathold){
-StringReplace, filepath,filepathold,"/","\"
-StringMid, floderpath, filepath, 1, InStr(filepath,"\",,0)-1
-if !FileExist(floderpath){
-  FileCreateDir, %floderpath%
+SplitPath, filepathold, name, dir, ext, name_no_ext, drive
+outputpath =  %dir%\%name_no_ext%_提取.%ext%
+
+if !FileExist(dir){
+  FileCreateDir, %dir%
 }
 
 }
 
 
-
+SmartZip(s, o, t = 4)
+{
+    IfNotExist, %s%
+        return, -1
+    oShell := ComObjCreate("Shell.Application")
+    if InStr(FileExist(o), "D") or (!FileExist(o) and (SubStr(s, -3) = ".zip"))
+    {
+        if !o
+            o := A_ScriptDir
+        else ifNotExist, %o%
+                FileCreateDir, %o%
+        Loop, %o%, 1
+            sObjectLongName := A_LoopFileLongPath
+        oObject := oShell.NameSpace(sObjectLongName)
+        Loop, %s%, 1
+        {
+            oSource := oShell.NameSpace(A_LoopFileLongPath)
+            oObject.CopyHere(oSource.Items, t)
+        }
+    }
+}
 
 
 

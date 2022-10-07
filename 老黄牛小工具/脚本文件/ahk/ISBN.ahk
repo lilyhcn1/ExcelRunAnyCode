@@ -1,64 +1,93 @@
-#SingleInstance, Force
-#Include <JSON>
-#Include <lilyfun>
-#Include <Class_bdocr>
-SetWorkingDir %A_ScriptDir%
-;-------------0.引用函数----------
-temparr := []
-jikeapi := readini("ApiKeys","jikeapi")
-;BaiduSecretKey1 := readini("ApiKeys","BaiduSecretKey1")
-img1 := readjsonconkey("ISBN")
-;-------------1.读取输入变量----------
-if (img1 != ""){  ;正常运行
-  ;读取api的结果 
-  url = https://api.jike.xyz/situ/book/isbn/%img1%?apikey=%jikeapi%
-
-  res := geturlcontent(url)
-  ;msgbox % res
-
-  r := JSON.Load(res)
-  ;newr=returnfirstvalue2(r)
+#Include %A_LineFile%\..\JSON.ahk
+apikey := ""
 
 
-    ;构造excel需要的数组
-    arr2 := []
-    ;newr := returnfirstvalue(r["pois"]["0"])
-    newr :=r["data"]
 
-    temparr :=newr
-}else{  ;出错后的处理
-  temparr["ISBN"] :="9787506380263"
-  temparr["author"] :="待返回"
-  temparr["authorIntro"] :="待返回"
-  temparr["brand"] :="待返回"
-  temparr["code"] :="待返回"
-  temparr["createTime"] :="待返回"
-  temparr["description"] :="待返回"
-  temparr["designed"] :="待返回"
-  temparr["douban"] :="待返回"
-  temparr["doubanScore"] :="待返回"
-  temparr["froms"] :="待返回"
-  temparr["id"] :="待返回"
-  temparr["localPhotoUrl"] :="待返回"
-  temparr["name"] :="待返回"
-  temparr["num"] :="待返回"
-  temparr["pages"] :="待返回"
-  temparr["photoUrl"] :="待返回"
-  temparr["price"] :="待返回"
-  temparr["published"] :="待返回"
-  temparr["publishing"] :="待返回"
-  temparr["reviews"] :="待返回"
-  temparr["size"] :="待返回"
-  temparr["subname"] :="待返回"
-  temparr["tags"] :="待返回"
-  temparr["translator"] :="待返回"
-  temparr["uptime"] :="待返回"
-  temparr["weight"] :="待返回"
+;错误检查 1 接口有没申请 ，2 第一个值返回对不对
+; 函数：找到数组的第一个值
+returnfirstvalue(ByRef arr){
+  For index, value in arr{
+      ;MsgBox % "Item " index " is '" arr[index] "'"
+      if(arr["ask"] <> ""){
+        fv := arr["ask"]
+      }else{
+        fv := arr[index]
+      }
+      break
+  }
+  return fv
+}
+
+; 函数：get方式获取返回值
+geturlcontent(ByRef url){
+    whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+    whr.Open("Get", url, true)
+    whr.Send()
+    whr.WaitForResponse()
+    r := whr.ResponseText
+  return r
 }
 
 
-;-------------2.最终写入变量----------
-savearr2json(temparr)
+
+; 函数：get方式获取返回值
+readtext(ByRef path){
+FileRead, jsonstr, path
+  return jsonstr
+}
+
+
+;读取文件
+FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+parsed := JSON.Load(jsonstr)
+fv := returnfirstvalue(parsed["contents"])     ;这里读取content的数据，自定义的就是content,并返回ahk或第一个值
+;msgbox % fv
+
+
+      if(apikey = ""){
+        msgbox,"请先申请api并填入ISBN.ahk"
+        run,https://jike.xyz/api/isbn.html
+        Exit 
+      }
+
+;读取api的结果 
+url = https://api.jike.xyz/situ/book/isbn/%fv%?apikey=%apikey%
+
+res := geturlcontent(url)
+;msgbox % res
+FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp2.json
+FileAppend,%res%,d:\老黄牛小工具\ExcelQuery\temp\temp2.json
+r := JSON.Load(res)
+;newr=returnfirstvalue2(r)
+
+
+;构造excel需要的数组
+arr2 := []
+;newr := returnfirstvalue(r["pois"]["0"])
+newr :=r["data"]
+
+arr2["script"] := "ahk"
+arr2["w"] := "all"    ;all时把所有键值都写入，key时按键值写入
+arr2["content"] := newr
+
+
+
+
+;将构造好的数组写入文本
+stringified := JSON.Dump(arr2,, 4)
+;msgbox % arr2["w"]
+FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
+;run,d:\老黄牛小工具\ExcelQuery\temp\temp.json
+
+;服务器的限制，强制等3秒
+sleep 3000
+
+
+
+
+
+
 
 
 

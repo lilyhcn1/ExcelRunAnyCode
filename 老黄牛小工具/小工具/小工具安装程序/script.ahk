@@ -91,7 +91,7 @@ if FileExist(floderpath){
   FileCopyDir, %scriptpath%\老黄牛小工具, %floderpath% , 1
 }
 ;安装autohotkey程序
- runwait,regedit /s %floderpath%\小工具\小工具安装程序\注册ahk.reg
+ runwait,regedit.exe /s %floderpath%\小工具\小工具安装程序\注册ahk.reg
 
 }
 
@@ -111,7 +111,7 @@ FileCopyDir, %scriptpath%\老黄牛小工具\Excel插件,%AppData%\Microsoft\Add
 xllpath := checkandgetpath("xll")
 SplitPath, xllpath, name, dir, ext, name_no_ext, drive
 vbspath = %dir%\安装插件.vbs
-Run ,Wscript %vbspath%
+Run ,Wscript.exe %vbspath%
 }
 
 

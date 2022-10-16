@@ -1,5 +1,5 @@
 ﻿#SingleInstance Force
-#Include <JSON>
+
 #Include <lilyfun>
 SetWorkingDir %A_ScriptDir%
 SetBatchLines -1
@@ -32,14 +32,14 @@ Gui Add, Text, x10 y243 w480 h2 0x10 ; Separator
 Gui Font, w700, Segoe UI
 Gui Add, CheckBox, x33 y253 w92 h23 Checked vc1, 基本程序
 Gui Add, CheckBox, x33 y282 w92 h23 Checked  vc2, 使用说明
-Gui Add, CheckBox, x33 y311 w92 h23 vc3, Excel插件
+Gui Add, CheckBox, x33 y311 w92 h23 Checked vc3, Excel插件
 Gui Add, CheckBox, x33 y342 w92 h23  vc4, RunAny
 Gui Font
 
 Gui Font,, Segoe UI
 Gui Add, Text, x126 y253 w410 h23 +0x200, (8M MB) - 核心程序
 Gui Add, Text, x126 y282 w393 h23 +0x200, (0 MB) - 介绍老黄牛小工具的使用方法.
-Gui Add, Text, x126 y311 w362 h23 +0x200, (1 MB) - Excel插件，可以使用实现无限功能。
+Gui Add, Text, x126 y311 w362 h23 +0x200, (0 MB) - Excel插件，可以使用实现无限功能。
 Gui Add, Text, x126 y341 w364 h23 +0x200, (0 MB) - 基于RunAny的快速启动程序
 
 Gui Font
@@ -96,34 +96,39 @@ if FileExist(floderpath){
 }
 
 
-if(c2=1){
-; 使用说明的介绍
-Run ,https://github.com/lilyhcn1/ExcelRunAnyCode
-sleep % 3000
-}
+
 
 if(c3=1){
+
 ; c2安装插件
-sleep % 3000
-FileCopyDir, %scriptpath%\老黄牛小工具\Excel插件,%AppData%\Microsoft\AddIns , 1
-
-
+sleep % 1500
 xllpath := checkandgetpath("xll")
-SplitPath, xllpath, name, dir, ext, name_no_ext, drive
-vbspath = %dir%\安装插件.vbs
+
+FileCopy, %scriptpath%\老黄牛小工具\Excel插件\老黄牛工具-功能模块.xlam,%AppData%\Microsoft\AddIns\老黄牛工具-功能模块.xlam , 1
+
+
+vbspath = %scriptpath%\老黄牛小工具\Excel插件\res\安装插件.vbs
 Run ,Wscript.exe %vbspath%
+
 }
 
 
 if(c4=1){
 ; c3安装RunAny
-sleep % 3000
+sleep % 2000
 RunAnypath := checkandgetpath("RunAny")
 Run ,%RunAnypath%
 msgbox,RunAny已经运行,您可以按 ~ 键查看效果.
 }
 
-sleep % 3000
+
+if(c2=1){
+; 使用说明的介绍
+Run ,https://github.com/lilyhcn1/ExcelRunAnyCode
+sleep % 2000
+}
+
+sleep % 2000
 msgbox,安装完成,请使用.
 exitapp
 return

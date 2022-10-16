@@ -47,6 +47,20 @@ return val
 
 }
 
+; 函数：json读取键值
+getjsonkey(ByRef k1,ByRef k2 :=""){
+FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+arr := JSON.Load(jsonstr)
+if(k2=""){
+val := arr[k1]
+}else{
+val :=arr[k1][k2]
+}
+
+
+return val
+}
+
 
 ; 函数：从json中的contents中读取键值
 readjsonconkey(ByRef key){
@@ -115,7 +129,13 @@ geturlcontent(ByRef url){
   return r
 }
 
-
+;把值写入当前的表格
+writeexcelcell(byref val){
+  objExcel:=Excel_Get()
+  y:=objExcel.ActiveCell.Column
+  x:=objExcel.ActiveCell.Row
+  objExcel.Cells(x,y).Value:= val
+}
 
 ; 函数：get方式获取返回值
 readtext(ByRef path){
@@ -195,6 +215,43 @@ run,%path%
 
 }
 
+
+;-- 获取Excel窗口的COM对象  By FeiYue
+Excel_Get(WinTitle="ahk_class XLMAIN")
+{
+  static obj
+  Try
+    if (obj.Version)
+      return obj
+  return obj:=Office_Get(WinTitle)
+}
+
+;-- 获取所有Office窗口的COM对象  By FeiYue
+Office_Get(WinTitle="")
+{
+  static h:=DllCall("LoadLibrary", "Str","oleacc", "Ptr")
+  WinGet, list, ControlListHwnd, % WinTitle ? WinTitle : "A"
+  For i,hWnd in StrSplit(list, "`n")
+  {
+    ControlGetPos, x, y, w, h,, ahk_id %hWnd%
+    if (y<10 or w<100 or h<100)
+      Continue
+    if DllCall("oleacc\AccessibleObjectFromWindow", "Ptr", hWnd
+    , "UInt", 0xFFFFFFF0, "Ptr", 0*(VarSetCapacity(IID,16)
+    +NumPut(0x0000000000020400,IID,"Int64")
+    +NumPut(0x46000000000000C0,IID,8,"Int64"))+&IID, "Ptr*", pacc)=0
+    {
+      Acc:=ComObject(9, pacc, 1)
+      Try
+        if (Acc.Application.Version)
+          return Acc.Application
+    }
+  }
+  MsgBox, 4096,, Error: Can't Get Object From ACC !
+  Exit
+}
+
+
 writeBase64File(fileName,base64Data){
 	nBytes := Base64Dec( base64Data, Bin )
 	File := FileOpen(fileName, "w")
@@ -229,8 +286,10 @@ return server
 
 ;获取文件的路径
 checkandgetpath(exename){
+toolpath  = D:\老黄牛小工具
 exefolder = D:\老黄牛小工具\小工具
 site = http://pub.r34.cc/toolsoft
+site2 = http://nat.r34.cc/toolsoft
 
 if (exename = "ffmpeg"){
   path = %exefolder%\ffmpeg.exe
@@ -251,10 +310,10 @@ if (exename = "ffmpeg"){
   path = %exefolder%\PDFEdit\%exename%.exe
   url = 
 }else if(exename = "xll"){
-  path = %AppData%\Microsoft\AddIns\老黄牛工具-64位.xll
+  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
   url = %site%/%exename%.zip
-}else if(exename = "RunAny"){
-  path = D:\老黄牛小工具\RunAny\%exename%.exe
+}else if(exename = "主文件"){
+  path = %A_Desktop%\主文件.xlsx
   url = %site%/%exename%.zip
 }
 
@@ -263,6 +322,9 @@ if not FileExist(path){
         MsgBox, 暂无网址，请自行上网下载。
         ExitApp 
     }
+	if (InternetCheckConnection(site2)){
+		site= site2
+	}
     MsgBox, 4, r34小工具 , 接下来即将安装%exename%软件到%path%。
     IfMsgBox, No
         ExitApp 
@@ -415,11 +477,10 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, E
 
 ;通过文件创建文件夹，保证文件夹的存在
 creatfolderbyfile(filepathold){
-SplitPath, filepathold, name, dir, ext, name_no_ext, drive
-outputpath =  %dir%\%name_no_ext%_提取.%ext%
-
-if !FileExist(dir){
-  FileCreateDir, %dir%
+StringReplace, filepath,filepathold,"/","\"
+StringMid, floderpath, filepath, 1, InStr(filepath,"\",,0)-1
+if !FileExist(floderpath){
+  FileCreateDir, %floderpath%
 }
 
 }

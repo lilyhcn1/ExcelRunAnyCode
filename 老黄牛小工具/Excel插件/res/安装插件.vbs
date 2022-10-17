@@ -1,7 +1,7 @@
 Const EXCEL_ADDIN_PATH_BEFORE = "HKCU\Software\Microsoft\Office\" 
 Const EXCEL_ADDIN_PATH_AFTER = "\Excel\Options\" 
-Const ADDIN_REG_VALUE = """老黄牛小工具-功能模块.xlam""" 
-Const ADDIN_REG_VALUE1 = """老黄牛小工具-64位.xll""" 
+Const ADDIN_REG_VALUE = """D:\老黄牛小工具\Excel插件\老黄牛小工具-功能模块.xlam""" 
+Const ADDIN_REG_VALUE1 = """D:\老黄牛小工具\Excel插件\老黄牛小工具-64位.xll""" 
 Const TEMP = """D:\老黄牛小工具\Excel插件\老黄牛小工具-64位.xll""" 
 Function RegistrationKeyExists(key) 
     On Error Resume Next 

@@ -104,7 +104,7 @@ if(c3=1){
 sleep % 1500
 xllpath := checkandgetpath("xll")
 
-FileCopy, %scriptpath%\老黄牛小工具\Excel插件\,%AppData%\Microsoft\AddIns\ , 1
+;FileCopy, %scriptpath%\老黄牛小工具\Excel插件\,%AppData%\Microsoft\AddIns\ , 1
 
 
 vbspath = %scriptpath%\老黄牛小工具\Excel插件\res\安装插件.vbs

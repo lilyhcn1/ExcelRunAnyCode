@@ -101,14 +101,14 @@ if FileExist(floderpath){
 if(c3=1){
 
 ; c2安装插件
-sleep % 1500
+sleep % 500
 xllpath := checkandgetpath("xll")
 
 ;FileCopy, %scriptpath%\老黄牛小工具\Excel插件\,%AppData%\Microsoft\AddIns\ , 1
 
 
 vbspath = %scriptpath%\老黄牛小工具\Excel插件\res\安装插件.vbs
-Run ,Wscript.exe %vbspath%
+runwait ,Wscript.exe %vbspath%
 
 }
 
@@ -118,6 +118,7 @@ if(c4=1){
 sleep % 2000
 RunAnypath := checkandgetpath("RunAny")
 Run ,%RunAnypath%
+
 msgbox,RunAny已经运行,您可以按 ~ 键查看效果.
 }
 
@@ -125,7 +126,7 @@ msgbox,RunAny已经运行,您可以按 ~ 键查看效果.
 if(c2=1){
 ; 使用说明的介绍
 Run ,https://github.com/lilyhcn1/ExcelRunAnyCode
-sleep % 2000
+sleep % 3000
 }
 
 sleep % 2000

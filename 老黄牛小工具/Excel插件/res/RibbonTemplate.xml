@@ -13,7 +13,7 @@
 				</group>
 				<group id="grp10" label="功能列表区">
 					<toggleButton id ="tb1" size="large" label="是否添加按钮" getImage="GetImage" getPressed="GetPressed" onAction="buttonclick"/>
-					<dynamicMenu id="网络API" size="large" image="wapi" label="自建API" getContent="getContent"/>
+					<dynamicMenu id="自建API" size="large" image="wapi" label="自建API" getContent="getContent"/>
 					<dynamicMenu id="系统功能" size="large" image="system" label="系统功能" getContent="getContent"/>
 					<dynamicMenu id="表格增强" size="large" image="excel" label="表格增强" getContent="getContent"/>
 					<dynamicMenu id="发送信息" size="large" image="message" label="发送信息" getContent="getContent"/>

@@ -5,8 +5,8 @@
 SetWorkingDir %A_ScriptDir%
 ;-------------0.引用函数----------
 
-path = D:\老黄牛小工具\Excel插件\res\主文件.xlsx
-newpath =%A_Desktop%\主文件.xlsx
+path = D:\老黄牛小工具\Excel插件\res\网络表格.xlsx
+newpath =%A_Desktop%\网络表格.xlsx
 if FileExist(path){
     FileCopy, %path%, %newpath% , 1
     run,%newpath%

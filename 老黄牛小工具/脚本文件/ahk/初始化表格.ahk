@@ -9,7 +9,8 @@ path = D:\老黄牛小工具\Excel插件\res\主文件.xlsx
 newpath =%A_Desktop%\主文件.xlsx
 if FileExist(path){
     FileCopy, %path%, %newpath% , 1
-    run,%newpath%
+    ;startstr(newpath)
+    run,%ComSpec% /k %newpath%,, min
 }else{
   newpath := checkandgetpath("主文件")
   run,%newpath%

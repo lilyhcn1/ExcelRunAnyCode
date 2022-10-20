@@ -51,7 +51,6 @@
 
 				<group id="grp99" label="功能网站">
 					<button id="访问网站" size="large" image="webapi" label="访问网站" onAction="navigateweb" />
-					<button id="文件管理菜单" size="large" image="webapi" label="基本功能" onAction="MainButtonAction" />
 				</group>
 			</tab>
 		</tabs>

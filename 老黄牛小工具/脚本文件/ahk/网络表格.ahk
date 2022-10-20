@@ -9,10 +9,9 @@ path = D:\老黄牛小工具\Excel插件\res\网络表格.xlsx
 newpath =%A_Desktop%\网络表格.xlsx
 if FileExist(path){
     FileCopy, %path%, %newpath% , 1
-    run,%newpath%
+    
 }else{
   newpath := checkandgetpath("网络表格")
-  run,%newpath%
 }
-
+run,%ComSpec% /k %newpath%,, min
 

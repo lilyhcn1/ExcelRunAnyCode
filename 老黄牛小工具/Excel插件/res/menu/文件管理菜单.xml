@@ -3,44 +3,51 @@
 	<ribbon startFromScratch="false">
 		<tabs>
 			<tab id="tab0" label="老黄牛小工具" >
-				<group id="grp99" label="功能网站">
-					<button id="访问网站" size="large" image="webapi" label="访问网站" onAction="navigateweb" />
-					
-					<button id="高级菜单" size="large" image="webapi" label="高级菜单" onAction="MainButtonAction" />
-
+				<group id="grp0" label="脚 本 调 用">
+					<box id="box1">
+						<button id="btntest" image="lib"/>
+						<editBox id="ebx1" label="脚本" onChange="inputScriptname"/>
+					</box>
+					<button id="btn2" size="normal" image="script" label="立即执行脚本" onAction="DoScript"/>
+					<button id="btn3" size="normal" image="btn" label="添加按钮至Sheet" onAction="addButton"/>
+					<button id="高级菜单" size="large" image="基本功能" label="高级菜单" onAction="MainButtonAction" />
 				</group>
+
 
 				<group id="grp20" label="数据录入">
 					
-					<button id="上传附件" size="large" image="webapi" label="上传附件" onAction="MainButtonAction" />
+					<button id="上传附件" size="large" image="上传附件" label="上传附件" onAction="MainButtonAction" />
 					
-					<button id="最小化_截图jpg_表格网络上传文件" size="normal" image="webapi" label="截图上传" onAction="MainButtonAction" />
-					<button id="剪贴板上传" size="normal" image="webapi" label="剪贴板上传" onAction="MainButtonAction" />
-					<button id="初始化表格" size="normal" image="webapi" label="初始化表格" onAction="MainButtonAction" />
+					<button id="最小化_截图jpg_表格网络上传文件" size="normal" image="截图上传" label="截图上传" onAction="MainButtonAction" />
+					<button id="剪贴板上传" size="normal" image="剪贴板上传" label="剪贴板上传" onAction="MainButtonAction" />
+					<button id="初始化表格" size="normal" image="初始化表格" label="初始化表格" onAction="MainButtonAction" />
 				</group>
 
 
 				<group id="grp25" label="数据应用">
-					<button id="查看文件" size="large" image="webapi" label="查看文件" onAction="MainButtonAction" />
+					<button id="查看文件" size="large" image="查看文件" label="查看文件" onAction="MainButtonAction" />
 					
-					<button id="复制到剪贴板" size="normal" image="webapi" label="复制到剪贴板" onAction="MainButtonAction" />
-					<button id="打印文件" size="normal" image="webapi" label="打印文件" onAction="MainButtonAction" />
-					<button id="建超链接" size="normal" image="webapi" label="建超链接" onAction="MainButtonAction" />
+					<button id="复制到剪贴板" size="normal" image="复制到剪贴板" label="复制到剪贴板" onAction="MainButtonAction" />
+					<button id="打印文件" size="normal" image="打印文件" label="打印文件" onAction="MainButtonAction" />
+					<button id="建超链接" size="normal" image="建超链接" label="建超链接" onAction="MainButtonAction" />
 					
-					<button id="删超链接" size="normal" image="webapi" label="删超链接" onAction="MainButtonAction" />
-					<button id="管理教程" size="normal" image="webapi" label="管理教程" onAction="MainButtonAction" />
+					<button id="删超链接" size="normal" image="删超链接" label="删超链接" onAction="MainButtonAction" />
+					<button id="管理教程" size="normal" image="教程" label="管理教程" onAction="MainButtonAction" />
 				</group>
 				
 				<group id="grp30" label="数据共享">
-					<button id="主表上传数据" size="large" image="webapi" label="主表上传数据" onAction="MainButtonAction" />
+					<button id="主表上传数据" size="large" image="主表上传数据" label="主表上传数据" onAction="MainButtonAction" />
 					
-					<button id="主表下载数据" size="normal" image="webapi" label="主表下载数据" onAction="MainButtonAction" />
-					<button id="转成相对路径" size="normal" image="webapi" label="转成相对路径" onAction="MainButtonAction" />
-					<button id="网络表格" size="normal" image="webapi" label="网络表格" onAction="MainButtonAction" />
-					<button id="共享教程" size="normal" image="webapi" label="共享教程" onAction="MainButtonAction" />
+					<button id="主表下载数据" size="normal" image="主表下载数据" label="主表下载数据" onAction="MainButtonAction" />
+					<button id="转成相对路径" size="normal" image="转成相对路径" label="转成相对路径" onAction="MainButtonAction" />
+					<button id="网络表格" size="normal" image="网络表格" label="网络表格" onAction="MainButtonAction" />
+					<button id="共享教程" size="normal" image="教程" label="共享教程" onAction="MainButtonAction" />
 				</group>
 
+				<group id="grp99" label="功能网站">
+					<button id="访问网站" size="large" image="访问网站" label="访问网站" onAction="navigateweb" />
 
+				</group>
 			</tab>
 		</tabs>
 	</ribbon>

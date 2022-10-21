@@ -203,7 +203,15 @@ FileAppend,%str%,%path%,UTF-8-RAW
 ;run,%path%
 
 }
+; 函数：删除并写入文件
+writetextgbk(ByRef str,ByRef path){
+FileDelete, %path%
+;TrayTip %path%, "path"
+;TrayTip %str%, "str"
+FileAppend,%str%,%path%,cp936
+;run,%path%
 
+}
 ;把字符串写到记事本中，方便复制
 startstr(ByRef str){
 path :="d:\老黄牛小工具\ExcelQuery\temp\temp.txt"

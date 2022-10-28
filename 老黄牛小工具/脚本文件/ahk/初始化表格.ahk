@@ -10,7 +10,7 @@ newpath =%A_Desktop%\主文件.xlsx
 if FileExist(path){
     FileCopy, %path%, %newpath% , 1
     ;startstr(newpath)
-    run,%ComSpec% /k %newpath%,, min
+    run,%ComSpec% /c %newpath%,, min
 }else{
   newpath := checkandgetpath("主文件")
   run,%newpath%

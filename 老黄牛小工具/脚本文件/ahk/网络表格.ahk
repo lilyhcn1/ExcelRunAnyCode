@@ -13,5 +13,5 @@ if FileExist(path){
 }else{
   newpath := checkandgetpath("网络表格")
 }
-run,%ComSpec% /k %newpath%,, min
+run,%ComSpec% /c %newpath%,, min
 

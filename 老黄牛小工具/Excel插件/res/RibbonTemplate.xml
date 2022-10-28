@@ -32,7 +32,7 @@
 					<button id="建超链接" size="normal" image="建超链接" label="建超链接" onAction="MainButtonAction" />
 					
 					<button id="删超链接" size="normal" image="删超链接" label="删超链接" onAction="MainButtonAction" />
-					<button id="管理教程" size="normal" image="教程" label="管理教程" onAction="MainButtonAction" />
+					<button id="文件管理教程" size="normal" image="教程" label="管理教程" onAction="MainButtonAction" />
 				</group>
 				
 				<group id="grp30" label="数据共享">
@@ -41,7 +41,7 @@
 					<button id="主表下载数据" size="normal" image="主表下载数据" label="主表下载数据" onAction="MainButtonAction" />
 					<button id="转成相对路径" size="normal" image="转成相对路径" label="转成相对路径" onAction="MainButtonAction" />
 					<button id="网络表格" size="normal" image="网络表格" label="网络表格" onAction="MainButtonAction" />
-					<button id="共享教程" size="normal" image="教程" label="共享教程" onAction="MainButtonAction" />
+					<button id="网络表格教程" size="normal" image="教程" label="共享教程" onAction="MainButtonAction" />
 				</group>
 
 				<group id="grp99" label="功能网站">

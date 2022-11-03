@@ -175,6 +175,25 @@ FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
 
 }
 
+; 函数：get方式获取返回值
+savearr1tojson(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
+;构造excel需要的数组
+arr2 := []
+arr1 := []
+arr2["script"] := "ahk"
+arr2["w"] := wtype
+arr2["code"] := code
+
+arr2["contents"] := arr
+
+
+
+;将构造好的数组写入文本
+stringified := JSON.Dump(arr2,, 4)
+FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
+
+}
 
 ; 函数：get方式获取返回值
 readini(ByRef sec,ByRef key){

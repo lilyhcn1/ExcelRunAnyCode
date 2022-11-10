@@ -26,14 +26,13 @@ Dim MaxRow, MaxCol
 n=0
 nowpath = SelectFolder(ExcelApp,Workbook)
 arr(0,0)="文件名称"
-arr(0,1)="文件相对路径"
-arr(0,2)="文件绝对路径"
-arr(0,3)="文件夹绝对路径"
-arr(0,4)="文件夹相对路径"
-arr(0,5)="文件名"
-arr(0,6)="修改时间"
-arr(0,7)="大小(kb)"
-arr(0,8)="扩展名"
+arr(0,1)="文件绝对路径"
+arr(0,2)="文件夹绝对路径"
+arr(0,3)="文件夹相对路径"
+arr(0,4)="文件名"
+arr(0,5)="修改时间"
+arr(0,6)="大小(kb)"
+arr(0,7)="扩展名"
 
 Call Getfd(nowpath, nowpath, arr, n) 'ThisWorkbook.Path是当前代码文件所在路径，路径名可以根据需求修改
 
@@ -63,14 +62,13 @@ Function Getfd(pth, RelativePath, arr, n)
             xdlj = xdlj & Trim(arrResult(i)) & "\"
         Next
         arr(n, 0) = Left(f.Name, InStrRev(f.Name, ".") - 1)
-        arr(n, 1) = xdlj  &f.Name
-        arr(n, 2) = f
-        arr(n, 3)=pth & "\"
-        arr(n, 4) = xdlj
-        arr(n, 5) = f.Name
-        arr(n, 6) = Format_Time(f.DateLastModified, 4)
-        arr(n, 7) = Int(f.Size / 1024)
-        arr(n, 8) = Mid(f.Name, InStrRev(f.Name, ".") + 1, Len(f.Name))
+        arr(n, 1) = f
+        arr(n, 2)=pth & "\"
+        arr(n, 3) = xdlj
+        arr(n, 4) = f.Name
+        arr(n, 5) = Format_Time(f.DateLastModified, 4)
+        arr(n, 6) = Int(f.Size / 1024)
+        arr(n, 7) = Mid(f.Name, InStrRev(f.Name, ".") + 1, Len(f.Name))
     Next 
     For Each fd In ff.subfolders
        Call Getfd(fd, RelativePath, arr, n)

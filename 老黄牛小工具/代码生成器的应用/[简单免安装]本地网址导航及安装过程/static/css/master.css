@@ -1,0 +1,289 @@
+﻿body,
+button,
+input,
+select,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: PingFang SC, Lantinghei SC, Helvetica Neue, Helvetica, Arial, Microsoft YaHei, \\5FAE\8F6F\96C5\9ED1, STHeitiSC-Light, simsun, \\5B8B\4F53, WenQuanYi Zen Hei, WenQuanYi Micro Hei, "sans-serif";
+}
+body{
+        padding-bottom: env(safe-area-inset-bottom);
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #000;
+}
+
+.ht5 {
+	width: 100%;
+	height: 5px;
+}
+
+.ht10 {
+	width: 100%;
+	height: 10px;
+}
+
+.ht15 {
+	width: 100%;
+	height: 15px;
+}
+
+.ht25 {
+	width: 100%;
+	height: 25px;
+}
+
+.logo {
+	height: 35px;
+}
+
+.search .form-group {
+	margin-bottom: 0px;
+}
+
+.search .t {
+	line-height: 34px;
+	font-size: 23px;
+	font-weight: 600;
+	text-align: center;
+	font-family: "times new roman";
+	font-weight: lighter;
+}
+
+.tools .t2 {
+	height: 35px;
+	line-height: 35px;
+	font-weight: 550;
+	text-align: center;
+}
+
+.search .btn1 {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	width: 70px;
+	background-color: #fff;
+	color: #000;
+}
+
+.search .btn2 {
+	background-color: #3385ff;
+	width: 82px;
+	color: #fff;
+}
+
+.tools .list {
+	margin: 0;
+	padding: 0;
+	/*border-bottom: 1px solid #b8b8b8;*/
+}
+
+.tools .list li {
+	width: 16.6%;
+	height: 35px;
+	line-height: 35px;
+	list-style-type: none;
+	float: left;
+	font-size: 16px;
+	text-align: center;
+}
+
+.tools .list li a {
+	display: block;
+}
+
+.tools .list li:hover a {
+	color: #228B22;
+	border: 1px solid #228B22;
+	border-radius: 3px;
+}
+
+.link {
+	margin: 0;
+	padding: 0;
+}
+
+.link li {
+	width: 33.3%;
+	height: 35px;
+	line-height: 35px;
+	float: left;
+	list-style-type: none;
+	font-size: 16px;
+	text-align: center;
+}
+
+.link li:hover a {
+	color: #228B22;
+	border: 1px solid #228B22;
+	border-radius: 3px;
+}
+
+.link li a {
+	display: block;
+}
+
+.nav_box .t {
+	padding: 0 6px;
+}
+
+
+/*底栏样式*/
+
+.footer {
+	color: #fff;
+	margin-top: 10px;
+	padding: 20px;
+	background: #706e6e;
+}
+
+.footer .content a {
+	color: #fff;
+}
+
+.footer .content p {
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.fixed-bottom {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+.update_list {
+	padding-left: 20px;
+	list-style-type: none;
+	font-size: 16px;
+}
+
+.weather {
+	cursor: pointer;
+}
+
+.logo .t {
+	float: left;
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 15px;
+}
+
+@media screen and (max-width: 767px) {
+	#input_search {
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+	.tools .list li {
+		list-style-type: none;
+		float: left;
+		width: 25%;
+		height: 35px;
+		line-height: 35px;
+		font-size: 16px;
+		text-align: center;
+	}
+	.nav_box .t {
+		padding: 0 10px;
+	}
+	#suggestionUl {
+		position: absolute;
+		top: 34px;
+		left: 0px;
+		z-index: 10;
+		padding: 0;
+		background-color: #fff;
+		border-bottom: 1px solid #b8b8b8;
+		margin-top: 5px;
+		width: 100%;
+	}
+	#suggestionUl li {
+		height: 35px;
+		line-height: 35px;
+		border-top: 1px solid #ccc;
+		list-style-type: none;
+		overflow: hidden;
+		font-size: 17px;
+		padding-left: 27px;
+		cursor: pointer;
+	}
+	.logo {
+		padding-left: 10px;
+		margin-top: 6px;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	#suggestionUl {
+		position: absolute;
+		top: 34px;
+		left: 84px;
+		z-index: 10;
+		padding: 0;
+		background-color: #fff;
+		border-right: 1px solid #b8b8b8;
+		border-left: 1px solid #b8b8b8;
+		border-bottom: 1px solid #b8b8b8;
+		/*修正宽屏上的搜索建议宽度,使之与搜索框宽度一致*/
+		width: calc(100% - 180px);
+	}
+	#suggestionUl li {
+		height: 27px;
+		line-height: 27px;
+		font-size: 16px;
+		list-style-type: none;
+		overflow: hidden;
+		cursor: pointer;
+		padding-left: 12px;
+	}
+	.logo {
+		padding-left: 6px;
+		margin-top: 6px;
+	}
+}
+
+#suggestionUl li:hover {
+	background-color: #d3d3d3;
+}
+
+.back_to_top {
+	position: fixed;
+	right: 25px;
+	bottom: 40px;
+	z-index: 9;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	background-color: #000;
+	color: #fff;
+	border-radius: 2px;
+	display: none;
+	cursor: pointer;
+	/*filter:alpha(opacity=90); 
+	opacity:0.9;*/
+}
+
+.main {
+	min-width: 345px;
+	max-width: 1024px;
+	margin: 0 auto;
+}
+
+img, svg, audio, video{
+    max-width: 100%;
+    vertical-align: middle;
+}

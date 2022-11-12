@@ -1,3 +1,6 @@
+;修正，剪贴板上传，lilyfun, postfile
+
+
 ;错误检查 1 接口有没申请 ，2 第一个值返回对不对
 ; 函数：找到数组的第一个值
 returnfirstvalue(ByRef arr){
@@ -11,6 +14,25 @@ returnfirstvalue(ByRef arr){
       break
   }
   return fv
+}
+
+;获取excel等obj，这样各个人都可以用。
+getexcelobj(){
+try {
+    ox := ComObjActive("Excel.Application")
+} catch e {
+  try {
+      ox := ComObjActive("KET.Application")
+  } catch e {
+      try {
+          ox := ComObjActive("KET.Application")
+      } catch e {
+         MsgBox, 请先安装Excel或Wps。
+         exitapp
+      }
+  }
+}   
+return ox 
 }
 
 
@@ -176,12 +198,12 @@ FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
 }
 
 ; 函数：get方式获取返回值
-savearr1tojson(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
+savearrtojson(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
 ;构造excel需要的数组
 arr2 := []
 arr1 := []
 arr2["script"] := "ahk"
-arr2["w"] := wtype
+arr2["w"] := "key"
 arr2["code"] := code
 
 arr2["contents"] := arr

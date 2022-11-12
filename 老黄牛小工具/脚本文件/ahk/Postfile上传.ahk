@@ -15,7 +15,7 @@ excelpath :=getjsonkey("excelpath")
 aa := uploadfile(updateweb, f,nowfield)
 arr := []
 arr["fileurl"] := aa
-savearr1tojson(arr)
+savearrtojson(arr)
 ;msgbox % aa
 ;writetext(aa, savehtml)
 run, %savehtml%

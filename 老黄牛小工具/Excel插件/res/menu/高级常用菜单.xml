@@ -51,7 +51,7 @@
 
 				<group id="grp99" label="功能网站">
 					<button id="访问网站" size="large" image="访问网站" label="访问网站" onAction="navigateweb" />
-					<button id="文件管理菜单" size="large" image="基本功能" label="基本功能" onAction="MainButtonAction" />
+					<button id="菜单切换" size="large" image="菜单切换" label="菜单切换" onAction="MainButtonAction" />
 				</group>
 			</tab>
 		</tabs>

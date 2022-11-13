@@ -10,7 +10,7 @@
 					</box>
 					<button id="btn2" size="normal" image="script" label="立即执行脚本" onAction="DoScript"/>
 					<button id="btn3" size="normal" image="btn" label="添加按钮至Sheet" onAction="addButton"/>
-					<button id="菜单切换" size="normal" image="菜单切换" label="菜单切换" onAction="MainButtonAction" />
+
 				</group>
 
 
@@ -46,7 +46,7 @@
 
 				<group id="grp99" label="功能网站">
 					<button id="访问网站" size="large" image="访问网站" label="访问网站" onAction="navigateweb" />
-
+					<button id="菜单切换" size="large" image="菜单切换" label="菜单切换" onAction="MainButtonAction" />
 				</group>
 			</tab>
 		</tabs>

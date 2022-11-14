@@ -7,7 +7,7 @@ SetWorkingDir %A_ScriptDir%
   ;读取文件
 FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
 arr := JSON.Load(jsonstr)
-TrayTip, Timed TrayTip, This will be displayed for 5 seconds.
+TrayTip, 已复制文件到剪贴板。
 path:=getarrkey(arr,"","now_val")
 excelpath :=getarrkey(arr,"","excelpath")  
 newpath := getwholepath(path,excelpath) ;获取绝对路径

@@ -34,6 +34,7 @@ Gui Add, CheckBox, x33 y253 w92 h23 Checked vc1, 基本程序
 Gui Add, CheckBox, x33 y282 w92 h23 Checked  vc2, 使用说明
 Gui Add, CheckBox, x33 y311 w92 h23 Checked vc3, Excel插件
 Gui Add, CheckBox, x33 y342 w92 h23  vc4, RunAny
+Gui Add, CheckBox, x33 y373 w92 h23  vc5, wps
 Gui Font
 
 Gui Font,, Segoe UI
@@ -41,6 +42,7 @@ Gui Add, Text, x126 y253 w410 h23 +0x200, (8M MB) - 核心程序
 Gui Add, Text, x126 y282 w393 h23 +0x200, (0 MB) - 介绍老黄牛小工具的使用方法.
 Gui Add, Text, x126 y311 w362 h23 +0x200, (0 MB) - Excel插件，可以使用实现无限功能。
 Gui Add, Text, x126 y341 w364 h23 +0x200, (0 MB) - 基于RunAny的快速启动程序
+Gui Add, Text, x126 y373 w364 h23 +0x200, (0 MB) - WPS插件安装方法
 
 Gui Font
 Gui Add, Text, x10 y400 w480 h2 0x10 ; Separator
@@ -51,6 +53,8 @@ Gui Add, Progress, -1 y430 w502 h49 Border, 0
 Gui Font,, Segoe UI
 ;Gui Add, Button, x413 y439 w75 h23 Default  g2ButtonOK, 下一步
 Gui, Add, Button, x413 y439 w75 h23 gBnext , 下一步  ; ButtonOK(如果存在) 会在此按钮被按下时运行.
+;Gui, Add, Button, x10 y405 w75 h23 gBnext , 功能1  ; ButtonOK(如果存在) 会在此按钮被按下时运行.
+;Gui, Add, Button, x100 y410 w75 h23 gBnext , 功能2  ; ButtonOK(如果存在) 会在此按钮被按下时运行.
 
 
 Gui Show, w499 h471, r34.cc
@@ -71,6 +75,9 @@ floderpath =D:\老黄牛小工具
 inipath = D:\老黄牛小工具\配置文件\myconf.ini
 scriptpath = ..\..\..\
 ;msgbox , %scriptpath%
+
+
+
 
 ; c1安装老黄牛小工具
 ;FileCopyDir, ..\老黄牛小工具, %floderpath% , 1
@@ -122,6 +129,11 @@ Run ,%RunAnypath%
 msgbox,RunAny已经运行,您可以按 ~ 键查看效果.
 }
 
+
+if(c5=1){
+s = 1. 安装宏组件：如不确认，可自己下载，下载地址：http://s.upsir.com/soft/WPS%20VBA%207.0.1590.exe`n2. 开启‘开发工具’：方法大致如下：1/3 单击“文件”—“选项”打开“Excel选项”窗口。 2/3 在“自定义功能区”选项中，勾选右侧列表中的“开发工具”。`n3.勾选项插件1：加载项--浏览--选择‘D:\老黄牛小工具\Excel插件\老黄牛小工具-32位.xll’`n4.勾选项插件2：加载项--浏览--选择‘D:\老黄牛小工具\Excel插件\老黄牛小工具-功能模块.xlam’ 
+startstr(s)
+}
 
 if(c2=1){
 ; 使用说明的介绍

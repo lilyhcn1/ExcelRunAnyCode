@@ -1,6 +1,6 @@
 
 Dim nowpath
-Dim arr(1000, 20), n
+Dim arr(99999, 20), n
 
 On Error Resume Next
 ' try to connect to et or excel

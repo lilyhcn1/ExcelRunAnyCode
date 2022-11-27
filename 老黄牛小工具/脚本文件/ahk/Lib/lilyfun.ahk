@@ -16,6 +16,13 @@ returnfirstvalue(ByRef arr){
   return fv
 }
 
+; 函数：找到数组的第一个key
+returnfirstkey(ByRef arr){
+  For index, value in arr{
+    return index
+  }
+}
+
 ;获取excel等obj，这样各个人都可以用。
 getexcelobj(){
 try {
@@ -168,7 +175,9 @@ FileRead, t, *P936 %path%
 
 ;气泡提示
 tr(ByRef s){
-  TrayTip #1, %s%
+  ;TrayTip #1, %s%
+  TrayTip , 老黄牛小工具, %s%
+  
 }
 ; 函数：get方式获取返回值
 utf8readtext(ByRef path){
@@ -217,9 +226,26 @@ FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
 
 }
 
+Time_unix2human(time)
+{
+        human=19700101000000
+        time-=((A_NowUTC-A_Now)//10000)*3600        ;时差
+        human+=%time%,Seconds
+        return human
+        }
+Time_human2unix(time)
+{
+    
+        time-=19700101000000,Seconds
+        time+=((A_NowUTC-A_Now)//10000)*3600        ;时差
+        return time
+}
+ 
+;a := Time_human2unix(A_Now) ;转时间戳
+;b := Time_unix2human(a) ;转 YYYYMMDDHH24MISS
+
 ; 函数：get方式获取返回值
-readini(ByRef sec,ByRef key){
-myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"
+readini(ByRef sec,ByRef key, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
 if FileExist(myconinifile){
   IniRead, inival, %myconinifile%, %sec%, %key%
   
@@ -227,12 +253,66 @@ if FileExist(myconinifile){
       msgbox , %myconinifile% 中的相关配置不存在，请确保【 %sec% 】节中的 %key% 存在！~
 
   }else if(inival =""){
-    msgbox , 请在 D:\老黄牛小工具\配置文件\myconf.ini 中填写\n在【 %sec% 】节中的 %key% 的值
+    msgbox , 请在 %myconinifile% 中填写\n在【 %sec% 】节中的 %key% 的值
   }
 }else{
     msgbox , %myconinifile% 这个文件不存在，请创建后再试！
 }
  return inival
+}
+; 函数：get方式获取返回值
+readiniarr(arr, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+newarr := []
+For index, value in arr{
+    ;msgbox % index
+    IniRead, inival, %myconinifile%, Temp, %index%
+    newarr[index] := inival
+}
+
+IniRead, inival, %myconinifile%, Temp, time
+newarr["time"] := inival
+if( newarr["time"] ="ERROR"){
+    newarr["time"] := "0"
+}else if( newarr["time"] =""){
+    newarr["time"] := "0"
+}
+return newarr
+
+}
+; 函数：get方式获取返回值
+writeini(ByRef sec,ByRef key,ByRef inival, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+IniWrite, inival, %myconinifile%, %sec%, %key%
+ return 1
+}
+; 函数：get方式获取返回值
+arrwriteini(ByRef arr, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+  For index, value in arr{
+    IniWrite, %value%, %myconinifile%, Temp, %index%
+  }
+ return 1
+}
+; 函数：get方式获取返回值
+arrupdatefromini(arr, runtime := 30, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+    oldarr :=[]
+    oldarr :=arr
+    larr := readiniarr(arr)
+
+    jg :=Time_human2unix(A_Now)-larr["time"]
+    ;msgbox % larr["reg"] 
+    key := returnfirstkey(arr)
+    if(larr[key]="" || Abs(jg) > runtime){
+      For index, value in oldarr{
+          if(index  != "time"){
+            InputBox, tmp, %index%, %value% 	
+            arr[index] := tmp           
+          }
+      }
+    }else{
+        arr :=larr
+    }
+    arr["time"] :=Time_human2unix(A_Now)
+    arrwriteini(arr)
+    return arr
 }
 
 ; 函数：删除并写入文件
@@ -340,6 +420,7 @@ exefolder = D:\老黄牛小工具\小工具
 site = http://pub.r34.cc/toolsoft
 site2 = http://nat.r34.cc/toolsoft
 
+
 if (exename = "ffmpeg"){
   path = %exefolder%\ffmpeg.exe
   url = %site%/ffmpeg.zip
@@ -357,7 +438,7 @@ if (exename = "ffmpeg"){
   url = %site%/%exename%.zip
 }else if(exename = "PDFEdit"){
   path = %exefolder%\PDFEdit\%exename%.exe
-  url = 
+  url = %site%/%exename%.zip
 }else if(exename = "xll"){
   path = %toolpath%\Excel插件\老黄牛工具-64位.xll
   url = %site%/%exename%.zip
@@ -366,6 +447,15 @@ if (exename = "ffmpeg"){
   url = %site%/%exename%.zip
 }else if(exename = "网络表格"){
   path = %A_Desktop%\网络表格.xlsx
+  url = %site%/%exename%.zip
+}else if(exename = "aria2c"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "wget"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "fastcopy"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
   url = %site%/%exename%.zip
 }
 

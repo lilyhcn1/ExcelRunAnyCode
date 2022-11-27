@@ -306,14 +306,20 @@ if (exename = "ffmpeg"){
 }else if(exename = "cpdf"){
   path = %exefolder%\pdf\%exename%.exe
   url = %site%/%exename%.zip
-}else if(exename = "PDFEdit"){
-  path = %exefolder%\PDFEdit\%exename%.exe
-  url = 
 }else if(exename = "xll"){
   path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
   url = %site%/%exename%.zip
 }else if(exename = "主文件"){
   path = %A_Desktop%\主文件.xlsx
+  url = %site%/%exename%.zip
+}else if(exename = "网络表格"){
+  path = %A_Desktop%\网络表格.xlsx
+  url = %site%/%exename%.zip
+}else if(exename = "PDFEdit"){
+  path = %exefolder%\PDFEdit\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "RunAny"){
+  path = %toolpath%\%exename%\%exename%.exe
   url = %site%/%exename%.zip
 }
 

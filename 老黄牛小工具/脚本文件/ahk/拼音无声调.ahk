@@ -1,88 +1,15 @@
-#Include %A_LineFile%\..\JSON.ahk
-;´íÎó¼ì²é 1 ½Ó¿ÚÓĞÃ»ÉêÇë £¬2 µÚÒ»¸öÖµ·µ»Ø¶Ô²»¶Ô
-; º¯Êı£ºÕÒµ½Êı×éµÄµÚÒ»¸öÖµ
-returnfirstvalue(ByRef arr){
-  For index, value in arr{
-      ;MsgBox % "Item " index " is '" arr[index] "'"
-      if(arr["ask"] <> ""){
-        fv := arr["ask"]
-      }else{
-        fv := arr[index]
-      }
-      break
-  }
-  return fv
-}
+ï»¿#SingleInstance, Force
+#Include <JSON>
+#Include <lilyfun>
+SetWorkingDir %A_ScriptDir%
+SplitPath, A_ScriptName, name, dir, ext, name_no_ext, drive
+jbname := name_no_ext ;è„šæœ¬çš„åå­—ç­‰äºæ–‡ä»¶å
 
+fkeyold := ""   ;è¦å‘é€çš„æ—§æ–‡ä»¶çš„æ ‡é¢˜è¡Œåç§°
+fkeynew := ""   ;è¦æ¥æ”¶çš„æ–°æ–‡ä»¶çš„æ ‡é¢˜è¡Œåç§°
 
-; º¯Êı£ºget·½Ê½»ñÈ¡·µ»ØÖµ
-geturlcontent(ByRef url){
-    whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-    whr.Open("Get", url, true)
-    whr.Send()
-    whr.WaitForResponse()
-    r := whr.ResponseText
-  return r
-}
-
-
-
-; º¯Êı£ºget·½Ê½»ñÈ¡·µ»ØÖµ
-readtext(ByRef path){
-FileRead, jsonstr, path
-  return jsonstr
-}
-
-
-;¶ÁÈ¡ÎÄ¼ş
-FileRead, jsonstr, d:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\ExcelQuery\temp\temp.json
-parsed := JSON.Load(jsonstr)
-fv := returnfirstvalue(parsed["contents"])
-;msgbox % fv
-
-;¶ÁÈ¡apiµÄ½á¹û
-url := "http://api.tianapi.com/txapi/pinyin/index?key=6fc9b18a18857af8ae0619e0ec3de9ee&text="fv
-;msgbox % url
-res := geturlcontent(url)
-r := JSON.Load(res)
-;newr=returnfirstvalue2(r)
-
-
-;¹¹ÔìexcelĞèÒªµÄÊı×é
-arr2 := []
-newr := returnfirstvalue(r["newslist"])
-arr2["script"] := "ahk"
-arr2["w"] := "all"
-arr2["content"] := newr
-
-
-;½«¹¹ÔìºÃµÄÊı×éĞ´ÈëÎÄ±¾
-stringified := JSON.Dump(arr2,, 4)
-;msgbox % arr2["w"]
-FileDelete, d:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\ExcelQuery\temp\temp.json
-FileAppend,%stringified%,d:\ÀÏ»ÆÅ£Ğ¡¹¤¾ß\ExcelQuery\temp\temp.json
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+;å‘é€postä¿¡æ¯å¹¶è¿”å›ï¼Œè¿™ä¸ªéå¸¸å¤æ‚,ä¸ºæ ¸å¿ƒä¸»æ–‡ä»¶å‡½æ•°åœ¨lilyfuné‡Œ
+apiserver := getserverurl()
+url := apiserver "/jb/" jbname
+PostCsvAndFile(url,fkeyold,fkeynew)
 

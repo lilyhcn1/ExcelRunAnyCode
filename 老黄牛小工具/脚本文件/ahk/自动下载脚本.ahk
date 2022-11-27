@@ -20,16 +20,20 @@ apiserver := getserverurl()
 url := apiserver "/dl/" jbname
 ;msgbox % url
   JsonData := {"json64": "" }
-           
-  ;发送编码后的base64字段
-result := getWebPage(url,JsonData)
-;writetext(result,"C:\Users\lilyhcn\Desktop\aa.txt")
-data2 := JSON.Load(result)
-data := JSON.Load(data2)
+try {
+	  ;发送编码后的base64字段
+	result := getWebPage(url,JsonData)
+	;writetext(result,"C:\Users\lilyhcn\Desktop\aa.txt")
+	data2 := JSON.Load(result)
+	data := JSON.Load(data2)
 
-ahkpath := jbpath "\" data.ext "\" jbname  "." data.ext
-;msgbox % ahkpath
-writetext(data.f64,ahkpath) 
+	ahkpath := jbpath "\" data.ext "\" jbname  "." data.ext
+	;msgbox % ahkpath
+	writetext(data.f64,ahkpath) 
+	;PostCsvAndFile(url,fkeyold,fkeynew)
+} catch e {
+	tr("找不到相应的脚本，请检查脚本名是否正确！")
+}
 
-;PostCsvAndFile(url,fkeyold,fkeynew)
+
 

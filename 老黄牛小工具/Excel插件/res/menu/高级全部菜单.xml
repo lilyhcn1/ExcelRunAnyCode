@@ -22,7 +22,7 @@
 					<dynamicMenu id="文件管理" size="large" image="message" label="文件管理" getContent="getContent"/>
 					<dynamicMenu id="发送信息" size="large" image="message" label="发送信息" getContent="getContent"/>
 					<dynamicMenu id="调试设定" size="large" image="message" label="调试设定" getContent="getContent"/>
-					
+					<dynamicMenu id="代码生成" size="large" image="message" label="代码生成" getContent="getContent"/>
 				</group>
 				<group id="grp20" label="数据录入">
 					

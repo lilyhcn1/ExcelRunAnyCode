@@ -1,3 +1,107 @@
+;修正，剪贴板上传，lilyfun, postfile
+;获取文件的路径
+;#Include ZeroMQ.ahk
+checkandgetpath(exename){
+toolpath  = D:\老黄牛小工具
+exefolder = D:\老黄牛小工具\小工具
+site = http://pub.r34.cc/toolsoft
+site2 = http://nat.r34.cc/toolsoft
+
+
+if (exename = "ffmpeg"){
+  path = %exefolder%\ffmpeg.exe
+  url = %site%/ffmpeg.zip
+}else if(exename = "nconvert"){
+  path = %exefolder%\缩小图片nconvert\nconvert.exe
+  url = %site%/nconvert.zip
+}else if(exename = "notepad2"){
+  path = %exefolder%\Notepad2\Notepad2.exe
+  url = %site%/Notepad2.zip
+}else if(exename = "realesrgan"){
+  path = %exefolder%\realesrgan\realesrgan-ncnn-vulkan.exe
+  url = %site%/realesrgan.zip
+}else if(exename = "cpdf"){
+  path = %exefolder%\pdf\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "PDFEdit"){
+  path = %exefolder%\PDFEdit\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "xll"){
+  path = %toolpath%\Excel插件\老黄牛工具-64位.xll
+  url = %site%/%exename%.zip
+}else if(exename = "主文件"){
+  path = %A_Desktop%\主文件.xlsx
+  url = %site%/%exename%.zip
+}else if(exename = "网络表格"){
+  path = %A_Desktop%\网络表格.xlsx
+  url = %site%/%exename%.zip
+}else if(exename = "aria2c"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "wget"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "fastcopy"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "openssl"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "rclone"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "桌面大鹅"){
+  path = %exefolder%\多媒体\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "曾大大按键软件"){
+  path = %exefolder%\多媒体\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else{
+  path = %exefolder%\其它\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}
+
+
+if not FileExist(path){
+
+    if (url =""){
+        MsgBox, 暂无网址，请自行上网下载。
+        ExitApp 
+    }
+    ;msgbox,准备InternetCheckConnection！~
+	if (checkurl(site2)){
+		url := StrReplace(url,site,site2)  ;替换为新的网站
+	}
+	
+	;startstr(url)
+	;MsgBox, 4, , url=%url%，site=%site%， site2=%site2%
+	;exit
+   ; msgbox,准备检查网址！~
+     if(checkurl(url)){
+        MsgBox, 4, r34小工具 , 接下来即将安装%exename%软件到%path%。
+        IfMsgBox, No
+            ExitApp 
+        creatfolderbyfile(path)
+        SplitPath, path, name, dir, ext, name_no_ext, drive
+        zippath = %dir%\temp.zip
+        DownloadFile( url, zippath)
+        SmartZip(zippath,dir)
+        FileDelete, %zippath%    
+     }else{
+        msgbox , 暂无相关的文件下载网址，请自行上网下载。
+        path := ""
+        ExitApp          
+     }
+}
+if not FileExist(path){
+        msgbox , %path%不存在，请检查。
+        path := ""
+        ExitApp          
+}
+return path
+}
+
+
 ;错误检查 1 接口有没申请 ，2 第一个值返回对不对
 ; 函数：找到数组的第一个值
 returnfirstvalue(ByRef arr){
@@ -11,6 +115,32 @@ returnfirstvalue(ByRef arr){
       break
   }
   return fv
+}
+
+; 函数：找到数组的第一个key
+returnfirstkey(ByRef arr){
+  For index, value in arr{
+    return index
+  }
+}
+
+;获取excel等obj，这样各个人都可以用。
+getexcelobj(){
+try {
+    ox := ComObjActive("Excel.Application")
+} catch e {
+  try {
+      ox := ComObjActive("KET.Application")
+  } catch e {
+      try {
+          ox := ComObjActive("KET.Application")
+      } catch e {
+         MsgBox, 请先安装Excel或Wps。
+         exitapp
+      }
+  }
+}   
+return ox 
 }
 
 
@@ -140,18 +270,23 @@ writeexcelcell(byref val){
 ; 函数：get方式获取返回值
 readtext(ByRef path){
 FileRead, t, *P936 %path%  
-
-  return t
+return t
 }
 
 ;气泡提示
 tr(ByRef s){
-  TrayTip #1, %s%
+  ;TrayTip #1, %s%
+  TrayTip , 老黄牛小工具, %s%
+  
 }
 ; 函数：get方式获取返回值
 utf8readtext(ByRef path){
 FileRead, t, *P65001 %path%
-  return t
+if not ErrorLevel{
+    return t
+}else{
+    return 0
+}
 }
 
 readtext2(File){
@@ -175,10 +310,114 @@ FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
 
 }
 
+; 函数：get方式获取返回值
+savearrtojson(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
+;构造excel需要的数组
+arr2 := []
+arr1 := []
+arr2["script"] := "ahk"
+arr2["w"] := "key"
+arr2["code"] := code
+
+arr2["contents"] := arr
+
+
+
+;将构造好的数组写入文本
+stringified := JSON.Dump(arr2,, 4)
+FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
+
+}
+
+Time_unix2human(time)
+{
+        human=19700101000000
+        time-=((A_NowUTC-A_Now)//10000)*3600        ;时差
+        human+=%time%,Seconds
+        return human
+        }
+Time_human2unix(time)
+{
+    
+        time-=19700101000000,Seconds
+        time+=((A_NowUTC-A_Now)//10000)*3600        ;时差
+        return time
+}
+ 
+ 
 
 ; 函数：get方式获取返回值
-readini(ByRef sec,ByRef key){
-myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"
+arr2excelarr(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
+;构造excel需要的数组
+arr2 := []
+arr2["script"] := "ahk"
+arr2["w"] := "all"
+arr2["code"] := "0"
+;arr2["excelpath"] := %A_ScriptDir%
+arr2["contents"] := []
+arr2["contents"] :=arr
+return arr2
+}
+
+
+;发送post信息并返回，这个非常复杂
+;url 是发送的url
+;fkeyold 是发送文件的信息，可为空
+;fkeynew 是接收文件的信息，可为空
+Postarr(ByRef url,ByRef arr2,ByRef fkeyold,ByRef fkeynew){
+
+  ;旧的文件路径，通常是文件模板
+  if(fkeyold <> ""){
+    mbpath := arr2["contents"][fkeyold]
+  }
+  ;新的文件路径，通常是生成的文件，可以是相对路径
+  if(fkeynew <> ""){   
+    nowpath := arr2["excelpath"]
+    genfname := arr2["contents"][fkeynew]
+    if(InStr(genfname,":")){
+      newfilepath := genfname 
+    }else{
+      newfilepath := nowpath  "\"  genfname 
+    }
+  }
+
+
+
+
+  ;读取文件
+  if(mbpath <> ""){
+    f64 :=readFile(mbpath)
+  }else{
+    f64 := ""
+  }
+
+
+json64 := b64Encode(JSON.Dump(arr2,, 4))
+  JsonData := {"json64": json64
+          , "f64": f64			 
+        , "fkeyold": fkeyold
+        , "fkeynew": fkeynew			 }
+           
+  ;发送编码后的base64字段
+  result := getWebPage(url,JsonData)
+
+  data := JSON.Load(result)
+  ;jsontemparr := JSON.Load(data.json64)
+  
+  ;将读取到base64字符解码后写入文件
+  if(newfilepath <> ""){
+    creatfolderbyfile(newfilepath)
+    writeBase64File(newfilepath,data.f64)
+  }
+  return data.json64
+}
+ 
+;a := Time_human2unix(A_Now) ;转时间戳
+;b := Time_unix2human(a) ;转 YYYYMMDDHH24MISS
+
+; 函数：get方式获取返回值
+readini(ByRef sec,ByRef key, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
 if FileExist(myconinifile){
   IniRead, inival, %myconinifile%, %sec%, %key%
   
@@ -186,20 +425,155 @@ if FileExist(myconinifile){
       msgbox , %myconinifile% 中的相关配置不存在，请确保【 %sec% 】节中的 %key% 存在！~
 
   }else if(inival =""){
-    msgbox , 请在 D:\老黄牛小工具\配置文件\myconf.ini 中填写\n在【 %sec% 】节中的 %key% 的值
+    msgbox , 请在 %myconinifile% 中填写\n在【 %sec% 】节中的 %key% 的值
   }
 }else{
     msgbox , %myconinifile% 这个文件不存在，请创建后再试！
 }
  return inival
 }
+; 函数：get方式获取返回值
+readiniarr(arr, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+newarr := []
+For index, value in arr{
+    ;msgbox % index
+    IniRead, inival, %myconinifile%, Temp, %index%
+    newarr[index] := inival
+}
+
+IniRead, inival, %myconinifile%, Temp, time
+newarr["time"] := inival
+if( newarr["time"] ="ERROR"){
+    newarr["time"] := "0"
+}else if( newarr["time"] =""){
+    newarr["time"] := "0"
+}
+return newarr
+
+}
+; 函数：get方式获取返回值
+writeini(ByRef sec,ByRef key,ByRef inival, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+IniWrite, inival, %myconinifile%, %sec%, %key%
+ return 1
+}
+; 函数：get方式获取返回值
+arrwriteini(ByRef arr, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+  For index, value in arr{
+    IniWrite, %value%, %myconinifile%, Temp, %index%
+  }
+ return 1
+}
+;获取输入的值
+getinput(){
+Loop, %0%
+{
+    param := %A_Index%
+}
+msgbox, %param%
+return %param%
+}
+
+; 函数：get方式获取返回值
+arrupdatefromini(arr, runtime := 30, myconinifile := "D:\老黄牛小工具\ExcelQuery\temp\temp.ini"){
+    oldarr :=[]
+    oldarr :=arr
+    larr := readiniarr(arr)
+
+    jg :=Time_human2unix(A_Now)-larr["time"]
+    ;msgbox % larr["reg"] 
+    key := returnfirstkey(arr)
+    if(larr[key]="" || Abs(jg) > runtime){
+      For index, value in oldarr{
+          if(index  != "time"){
+            InputBox, tmp, %index%, %value% 	
+            arr[index] := tmp           
+          }
+      }
+    }else{
+        arr :=larr
+    }
+    arr["time"] :=Time_human2unix(A_Now)
+
+    arrwriteini(arr, myconinifile)
+    return arr
+}
+
+; 函数：get方式获取返回值
+arrupdate(arr, runtime := 30, port := 5555){
+
+SetBatchLines -1                       ; 速度最大化
+
+zmq := new ZeroMQ                      ; 初始化 ZeroMQ
+
+context := zmq.context()               ; 创建一个上下文
+socket := context.socket(zmq.REQ)      ; 创建一个 REQ 套接字
+socket.connect("tcp://localhost:5555") ; 连接到端口
+
+
+
+;reg为最后要提取的变量，可以统一输入
+;arr :=[]
+;arr["reg"] := "请输入正则公式,正则公式比较复杂，请自行上网检索。`n 相关网站：`nhttps://c.runoob.com/front-end/854/（30秒内免再输入）"
+;arr :=arrupdate(arr)
+;reg := arr["reg"]
+
+arr2 := arr2excelarr(arr)
+str := JSON.Dump(arr2,, 4)
+;startstr(str)
+socket.send_string(str)          ; 发送消息 Hello 给服务端
+jsonstr := socket.recv_string()          ; 从服务端接收回应
+
+temparr2 := JSON.Load(jsonstr)
+;socket.send_string("World")     ; 发送消息 World 给客户端
+rec_arr :=temparr2["contents"]
+
+return rec_arr
+}
 
 ; 函数：删除并写入文件
-writetext(ByRef str,ByRef path){
+writetext(ByRef str,ByRef path, ByRef encoding := "UTF-8-RAW"){
+FileDelete, %path%
+FileAppend,%str%,%path%,%encoding%
+;run,%path%
+}
+; 函数：删除并写入文件
+writetextutf8(ByRef str,ByRef path, ByRef encoding := "UTF-8"){
 FileDelete, %path%
 ;TrayTip %path%, "path"
 ;TrayTip %str%, "str"
-FileAppend,%str%,%path%,UTF-8-RAW
+FileAppend,%str%,%path%,%encoding%
+;run,%path%
+}
+; 函数：删除并写入文件
+writetextgbk(ByRef str,ByRef path){
+FileDelete, %path%
+;TrayTip %path%, "path"
+;TrayTip %str%, "str"
+FileAppend,%str%,%path%,cp936
+;run,%path%
+
+}
+
+
+; 函数：删除并写入文件
+writetextencoding(ByRef str,ByRef path,ByRef encoding){
+inputpath := str
+encoding = "utf-8"
+if fileexist(inputpath){
+    SplitPath, inputpath, name, dir, ext, name_no_ext, drive
+    if (ext = "ahk"){
+        encoding = "utf-8"
+    }else if (ext = "bat"){
+        encoding = "cp936"
+    }else{
+        encoding = "UTF-8-RAW"
+    }
+}
+msgbox, %encoding%
+FileDelete, %path%
+;TrayTip %path%, "path"
+;TrayTip %str%, "str"
+FileAppend,%str%,%path%,%encoding%
 ;run,%path%
 
 }
@@ -284,73 +658,7 @@ if(server1 ="ERROR"){
 return server
 }
 
-;获取文件的路径
-checkandgetpath(exename){
-toolpath  = D:\老黄牛小工具
-exefolder = D:\老黄牛小工具\小工具
-site = http://pub.r34.cc/toolsoft
-site2 = http://nat.r34.cc/toolsoft
 
-if (exename = "ffmpeg"){
-  path = %exefolder%\ffmpeg.exe
-  url = %site%/ffmpeg.zip
-}else if(exename = "nconvert"){
-  path = %exefolder%\缩小图片nconvert\nconvert.exe
-  url = %site%/nconvert.zip
-}else if(exename = "notepad2"){
-  path = %exefolder%\Notepad2\Notepad2.exe
-  url = %site%/Notepad2.zip
-}else if(exename = "realesrgan"){
-  path = %exefolder%\realesrgan\realesrgan-ncnn-vulkan.exe
-  url = %site%/realesrgan.zip
-}else if(exename = "cpdf"){
-  path = %exefolder%\pdf\%exename%.exe
-  url = %site%/%exename%.zip
-}else if(exename = "xll"){
-  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
-  url = %site%/%exename%.zip
-}else if(exename = "主文件"){
-  path = %A_Desktop%\主文件.xlsx
-  url = %site%/%exename%.zip
-}else if(exename = "网络表格"){
-  path = %A_Desktop%\网络表格.xlsx
-  url = %site%/%exename%.zip
-}else if(exename = "PDFEdit"){
-  path = %exefolder%\PDFEdit\%exename%.exe
-  url = %site%/%exename%.zip
-}else if(exename = "RunAny"){
-  path = %toolpath%\%exename%\%exename%.exe
-  url = %site%/%exename%.zip
-}
-
-if not FileExist(path){
-    if (url =""){
-        MsgBox, 暂无网址，请自行上网下载。
-        ExitApp 
-    }
-	if (InternetCheckConnection(site2)){
-		site= site2
-	}
-    MsgBox, 4, r34小工具 , 接下来即将安装%exename%软件到%path%。
-    IfMsgBox, No
-        ExitApp 
-     
-      creatfolderbyfile(path)
-      SplitPath, path, name, dir, ext, name_no_ext, drive
-      zippath = %dir%\temp.zip
-      DownloadFile( url, zippath)
-      
-      SmartZip(zippath,dir)
-      FileDelete, %zippath% 
-}
-
-if not FileExist(path){
-    msgbox , %path% 不存在，请自行下载。
-    path := ""
-    ExitApp 
-}
-return path
-}
 
 getserverurl2(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
 
@@ -378,10 +686,32 @@ return server
 
 }
 ;测试网页是否正常
+checkurl(Url="") {
+try {
+  whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+  ;whr.SetTimeouts(300, 300, 300, 300)
+  whr.Open("GET", Url, "True")
+  whr.Send()
+  ; 使用 'true'(上面) 和调用下面的函数, 允许脚本保持响应.
+  ;Status := whr.Status
+  whr.WaitForResponse(1) ;等1秒
+  ;version := whr.ResponseText
+  Status := whr.Status
+  if(Status=200){
+      Return True   
+  }else{
+      Return False  
+  }
+} catch e {
+   Return False  
+}
+
+
+}
+;测试网页是否正常
 InternetCheckConnection(Url="",FIFC=1) {
 Return DllCall("Wininet.dll\InternetCheckConnectionW", Str,Url, Int,FIFC, Int,0)
 }
-
 getWebPage(url, postData := 0, headers := 0, method := 0)
 {
 	if (postData && IsObject(postData))
@@ -420,7 +750,7 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, E
             FinalSize := WebRequest.GetResponseHeader("Content-Length")
         } catch e {
             ; Cannot get "Content-Length" header
-            FinalSize := ExpectedFileSize
+            FinalSize := Exp`ectedFileSize
         }
 
         ;Create the progressbar and the timer
@@ -477,6 +807,7 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, E
 
         ;Update the ProgressBar
         Progress, %PercentDone%, %PercentDone%`% (%SpeedText%), Downloading..., Downloading %SaveFileAs% (%PercentDone%`%)
+    
     Return
 }
 
@@ -599,4 +930,155 @@ Base64Dec( ByRef B64, ByRef Bin ) {  ; By SKAN / 18-Aug-2017
 	DllCall( "Crypt32.dll\CryptStringToBinary", "Str",B64, "UInt",BLen, "UInt",0x1
 				, "Ptr",&Bin, "UIntP",Rqd, "Int",0, "Int",0 )
 	return Rqd
+}
+ 
+CreateFormData(ByRef retData, ByRef retHeader, objParam) {
+    New CreateFormData(retData, retHeader, objParam)
+}
+ 
+Class CreateFormData {
+ 
+    __New(ByRef retData, ByRef retHeader, objParam) {
+ 
+        CRLF := "`r`n"
+ 
+        ; Create a random Boundary
+        Boundary := this.RandomBoundary()
+        BoundaryLine := "------------------------------" . Boundary
+ 
+        ; Loop input paramters
+        binArrs := []
+        For k, v in objParam
+        {
+            If IsObject(v) {
+                For i, FileName in v
+                {
+                    str := BoundaryLine . CRLF
+                         . "Content-Disposition: form-data; name=""" . k . """; filename=""" . FileName . """" . CRLF
+                         . "Content-Type: " . this.MimeType(FileName) . CRLF . CRLF
+                    binArrs.Push( BinArr_FromString(str) )
+                    binArrs.Push( BinArr_FromFile(FileName) )
+                    binArrs.Push( BinArr_FromString(CRLF) )
+                }
+            } Else {
+                str := BoundaryLine . CRLF
+                     . "Content-Disposition: form-data; name=""" . k """" . CRLF . CRLF
+                     . v . CRLF
+                binArrs.Push( BinArr_FromString(str) )
+            }
+        }
+ 
+        str := BoundaryLine . "--" . CRLF
+        binArrs.Push( BinArr_FromString(str) )
+ 
+        ; Finish
+        retData := BinArr_Join(binArrs*)
+        retHeader := "multipart/form-data; boundary=----------------------------" . Boundary
+    }
+ 
+    RandomBoundary() {
+        str := "0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z"
+        Sort, str, D| Random
+        str := StrReplace(str, "|")
+        Return SubStr(str, 1, 12)
+    }
+ 
+    MimeType(FileName) {
+        n := FileOpen(FileName, "r").ReadUInt()
+        Return (n        = 0x474E5089) ? "image/png"
+             : (n        = 0x38464947) ? "image/gif"
+             : (n&0xFFFF = 0x4D42    ) ? "image/bmp"
+             : (n&0xFFFF = 0xD8FF    ) ? "image/jpeg"
+             : (n&0xFFFF = 0x4949    ) ? "image/tiff"
+             : (n&0xFFFF = 0x4D4D    ) ? "image/tiff"
+             : "application/octet-stream"
+    }
+ 
+}
+ 
+BinArr_FromString(str) {
+    oADO := ComObjCreate("ADODB.Stream")
+ 
+    oADO.Type := 2 ; adTypeText
+    oADO.Mode := 3 ; adModeReadWrite
+    oADO.Open
+    oADO.Charset := "UTF-8"
+    oADO.WriteText(str)
+ 
+    oADO.Position := 0
+    oADO.Type := 1 ; adTypeBinary
+    oADO.Position := 3 ; Skip UTF-8 BOM
+    return oADO.Read, oADO.Close
+}
+ 
+BinArr_FromFile(FileName) {
+    oADO := ComObjCreate("ADODB.Stream")
+ 
+    oADO.Type := 1 ; adTypeBinary
+    oADO.Open
+    oADO.LoadFromFile(FileName)
+    return oADO.Read, oADO.Close
+}
+ 
+BinArr_Join(Arrays*) {
+    oADO := ComObjCreate("ADODB.Stream")
+ 
+    oADO.Type := 1 ; adTypeBinary
+    oADO.Mode := 3 ; adModeReadWrite
+    oADO.Open
+    For i, arr in Arrays
+        oADO.Write(arr)
+    oADO.Position := 0
+    return oADO.Read, oADO.Close
+}
+ 
+BinArr_ToString(BinArr, Encoding := "UTF-8") {
+    oADO := ComObjCreate("ADODB.Stream")
+ 
+    oADO.Type := 1 ; adTypeBinary
+    oADO.Mode := 3 ; adModeReadWrite
+    oADO.Open
+    oADO.Write(BinArr)
+ 
+    oADO.Position := 0
+    oADO.Type := 2 ; adTypeText
+    oADO.Charset  := Encoding
+    return oADO.ReadText, oADO.Close
+}
+ 
+BinArr_ToFile(BinArr, FileName) {
+    oADO := ComObjCreate("ADODB.Stream")
+ 
+    oADO.Type := 1 ; adTypeBinary
+    oADO.Open
+    oADO.Write(BinArr)
+    oADO.SaveToFile(FileName, 2)
+    oADO.Close
+}
+
+
+; ===============================================================================================================================
+; Base64 Encode / Decode a string (binary-to-text encoding)
+; ===============================================================================================================================
+ 
+b64Encode(string)
+{
+    VarSetCapacity(bin, StrPut(string, "UTF-8")) && len := StrPut(string, &bin, "UTF-8") - 1 
+    if !(DllCall("crypt32\CryptBinaryToString", "ptr", &bin, "uint", len, "uint", 0x1, "ptr", 0, "uint*", size))
+        throw Exception("CryptBinaryToString failed", -1)
+    VarSetCapacity(buf, size << 1, 0)
+    if !(DllCall("crypt32\CryptBinaryToString", "ptr", &bin, "uint", len, "uint", 0x1, "ptr", &buf, "uint*", size))
+        throw Exception("CryptBinaryToString failed", -1)
+    return StrGet(&buf)
+}
+ 
+b64Decode(string)
+{
+    if !(DllCall("crypt32\CryptStringToBinary", "ptr", &string, "uint", 0, "uint", 0x1, "ptr", 0, "uint*", size, "ptr", 0, "ptr", 0))
+        throw Exception("CryptStringToBinary failed", -1)
+    VarSetCapacity(buf, size, 0)
+    if !(DllCall("crypt32\CryptStringToBinary", "ptr", &string, "uint", 0, "uint", 0x1, "ptr", &buf, "uint*", size, "ptr", 0, "ptr", 0))
+        throw Exception("CryptStringToBinary failed", -1)
+    return StrGet(&buf, size, "UTF-8")
+
 }

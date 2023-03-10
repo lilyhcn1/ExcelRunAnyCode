@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{function}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/layui/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../static/js/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static',path='/layui/layui.all.js') }}"></script>
+	<link rel="stylesheet" href="{{ url_for('static',path='/layui/css/layui.css') }}">
+	<script type="text/javascript" src="{{ url_for('static',path='layui/layui.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static',path='/layui/layui.all.js') }}"></script>
+</head>
+<body>
+
+<div style="width:50%;margin-left:20%;margin-top:2%"  >
+    <div id="type1"><h3>{{function}}</h3></div>
+    <div class="form-group">
+        <!--  判断是否有文件输入      -->
+        {% if filename   %}
+        <label >     </label>
+            <div>
+                <div style="display:inline-block;">
+                    <span>请上传：{{filename}}</span>
+                </div>
+                <div style="display:inline-block;">
+                    <input type="file" id="file" name="file">
+                </div>
+            </div>
+        {% endif %}
+
+        <label >     </label>
+        <!--       文字输入框迭代        -->
+        {% for input1 in input_web %}
+        <div>
+
+            <div style="display:inline-block">
+               <span>{{ input1[0] }}：</span>
+            </div>
+            <div style="display:inline-block;width:90%">
+                <input  type="email" class="form-control" id="{{  loop.index }}" placeholder="请输入：{{ input1[1] }}" name="{{ input1[0] }}" key="{{ input1[0] }}">
+            </div>
+        </div>
+
+        <label >     </label>
+        {% endfor %}
+
+
+        {% for input1 in newfilearr %}
+        <input  type="hidden" class="form-control" value="{{ input1[1] }}" id="newkey1" name="{{ input1[0] }}" key="{{ input1[0] }}">
+        {% endfor %}
+
+     </div>
+     <button type="button" id="run" class="btn btn-primary">确定</button>
+        <div style="height:20px"></div>
+
+    <a id="running" name="file1" style="display:none;">正在运行请稍后！</a>
+
+     <a id="file_download" name="file1" style="display:none;cursor:pointer">点击下载生成的文件</a>
+
+
+</div>
+        <!--   输出结果的表格     -->
+        <div>
+            <div style="height:200px;width:60%;margin-left:20%">
+                <table id="userTable2" lay-filter="test"></table>
+            </div>
+        </div>
+    <input type="hidden" name="base64file" id="base64file">
+</body>
+
+    <script>
+<!--             监听是否有文件上传-->
+        $(document).ready(function(){
+            var file="";
+            if("{{filename}}"){
+                $("#file").change(function(){
+                var reader = new FileReader();
+                reader.readAsDataURL($("#file")[0].files[0]);
+                reader.onload=function(e){
+                    file=e.target.result;
+                }
+            });
+            }
+
+        <!--    点击运行后    -->
+        $("#run").click(function(){
+
+        $("#running").css("display","block");
+
+        <!--    定义一个全局字典    -->
+        var item1 = {};
+
+        <!--    定义一个字典    -->
+        var dic = {};
+
+        <!--    输入的个数    -->
+        var n={{ input_web | length  }};
+
+        <!--    脚本名称    -->
+        var script_name="{{function}}";
+
+        <!--    获取全部文本框的输入    -->
+        for(i=1;i<=n;i++){
+            v=$("#"+i).val();
+<!--     是否要全部输入       -->
+<!--            if(v=="")-->
+<!--            {-->
+<!--                return-->
+<!--            }-->
+            dic[""+$("#"+i).attr("key")]=v;
+        }
+
+        v=$("#newkey1").val();
+        if(v!=""){
+            dic[$("#newkey1").attr("key")]=v;
+        }
+            
+
+
+
+
+        <!--    构造输入字典    -->
+        item1["script_name"]=script_name;
+        item1["values"]=dic;
+        item1["database64"]=file;
+
+
+
+        var item=JSON.stringify(item1);
+
+        <!--   构建表格     -->
+        var element = layui.element;
+        var table = layui.table;
+        var form = layui.form;
+                            $.ajax({
+									type: "post",
+									url: "/run4/",
+									data:item,
+									dataType:"json",
+									contentType: "application/json",
+									success: function (result) {
+
+									    var base64=result["base64"];
+                        <!--					如果传入的base64为空，则不需要生成文件				    -->
+									    if(base64!=""){
+									        $("#file_download").css("display","block");
+                                            $("#file_download").click(function(){
+                                                downloadFileByBase64(result["filename"],base64);
+                                            });
+									    }
+                                <!--                  显示结果的表格                  -->
+										  var data=result["state"];
+                                                              // 展示已知数据
+                                                              table.render({
+                                                                elem: '#userTable2'
+                                                                ,cols:[[
+                                                                        //标题栏
+                                                                        {field: 'key', title: '属性',width: 150}
+                                                                        ,{field: 'values', title: '输出值',  minWidth: 100}
+                                                                        ]]
+                                                                ,data:data
+                                                                ,skin: 'line' //表格风格
+                                                                ,even: true
+                                                                ,page: false //是否显示分页
+                                                              });
+                                                              table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                                                               var data = obj.data; //获得当前行数据
+                                                               var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                                                              });
+                                                              $("#running").css("display","none");
+									},
+									error:function (result) {
+										alert("出错了");
+									},
+									});
+                            });
+        })
+
+                                 <!--    下载文件的函数      -->
+                                        function dataURLtoBlob(dataurl,name) {//name:文件名
+                                            var mime = name.substring(name.lastIndexOf('.')+1)//后缀名
+                                            var bstr = atob(dataurl), n = bstr.length, u8arr = new Uint8Array(n);
+                                            while (n--) {
+                                                u8arr[n] = bstr.charCodeAt(n);
+                                            }
+                                            return new Blob([u8arr], { type: mime });
+                                        }
+                                        function downloadFile(url,name='默认文件名'){
+                                            var a = document.createElement("a")//创建a标签触发点击下载
+                                            a.setAttribute("href",url)//附上
+                                            a.setAttribute("download",name)
+                                            a.setAttribute("target","_blank")
+                                            let clickEvent = document.createEvent("MouseEvents");
+                                            clickEvent.initEvent("click", true, true);
+                                            a.dispatchEvent(clickEvent);
+                                        }
+                                        //主函数
+                                        function downloadFileByBase64(name,base64){
+                                            var myBlob = dataURLtoBlob(base64,name)
+                                            var myUrl = URL.createObjectURL(myBlob)
+                                            downloadFile(myUrl,name)
+                                        }
+
+    </script>
+</html>

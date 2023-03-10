@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+<!--第一步：引入Javascript / CSS （CDN）-->
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="../static/datatable/jquery.dataTables.css">
+ 
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="../static/datatable/jquery-1.10.2.min.js"></script>
+ 
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="../static/datatable/jquery.dataTables.js"></script>
+
+</head>
+<body>
+    <h1 align="center">老黄牛python网页化</h1>
+<table id="mydata" class="tableclass" cellspacing="0" width="100%">
+    <thead id="mythead">
+    </thead>
+	<tbody id="mytbody" >
+	</tbody>
+ </table>
+
+<script>
+
+var url="/id"
+//$.getJSON(url, function(jsonarr) {
+//mydata=jsonarr.arr
+//console.log(mydata)
+//}
+
+
+
+$.ajaxSettings.async = false;
+ $.getJSON("/id",function(jsonarr){
+
+   var obj = JSON.parse(jsonarr);
+
+var cl=""
+mydata=obj.arr
+$.each(mydata, function(i, valarr){
+
+
+if (cl==valarr['d1']){
+    
+}
+ if (i==0) {
+	var tt
+	tt="<tr>"
+	tt=tt+' <th>'+"功能名"+'</th>'
+	    +' <th>'+"相关资料"+'</th>'
+	    +' <th>'+"运行状态"+'</th>'
+	tt=tt+"</tr>"
+	$("#mythead").append(tt);
+}else{
+	// console.log(valarr)
+	var tt
+	tt="<tr>"
+	tt=tt+' <td align="center"><a href="/jb/'+valarr['功能名']+"py"+'">'+valarr['功能名']+'</a></td>'
+	    +' <td align="center"><a href="//r34.cc/index.php/Qwadmin/Vi/uniquerydata/rpw/8K3130517E/sheetname/jbindex/name/'+valarr['功能名']+""+'">'+"r34.cc查询 "+valarr['功能名']+'</a></td>'
+	    +' <td align="center">'+"√"+'</td>'
+	tt=tt+"</tr>"
+	$("#mytbody").append(tt);
+}
+
+}); 	});
+</script>
+
+<script>	
+		setCommonOptions(".tableclass")
+        function setCommonOptions(tableclass) {
+
+            $(tableclass).DataTable({
+                //  "lengthMenu": [50, 100,200,1000,9999],
+                // 每页的初期件数 用户可以操作lengthMenu上的值覆盖
+                "pageLength": 5,
+                // "searching":false,    //去掉搜索框方法一
+                // "bFilter":false,    //去掉搜索框方法二
+                // "info":false,    //去掉底部的文字
+                // "bSort":false,    //禁止排序
+                "aaSorting": [], //选项为空数组。它将禁用初始排序，同时仍然允许在单击列时进行手动排序。
+                "oLanguage": {
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sZeroRecords": "抱歉， 没有找到",
+                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                    "sInfoEmpty": "没有数据",
+                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                    "sSearch": "表格内搜索",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "前一页",
+                        "sNext": "后一页",
+                        "sLast": "尾页"
+                    },
+                    "sZeroRecords": "没有检索到数据",
+                    "sProcessing": "<img src='./loading.gif' />"
+                },
+                "bPaginate": false, //翻页功能 
+                "bLengthChange": true, //改变每页显示数据数量 
+                "bFilter": true, //过滤功能 
+                "bInfo": false, //页脚信息 
+                "bAutoWidth": true, //自动宽度
+                'dom': 'Bfrtip',
+                'buttons': [],
+
+            })
+        }
+</script>
+
+	
+</body>
+</html>

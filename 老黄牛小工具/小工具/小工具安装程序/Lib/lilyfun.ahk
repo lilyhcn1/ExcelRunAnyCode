@@ -7,8 +7,13 @@ exefolder = D:\老黄牛小工具\小工具
 site = http://pub.r34.cc/toolsoft
 site2 = http://nat.r34.cc/toolsoft
 
-
-if (exename = "ffmpeg"){
+if (exename = "RunAny"){
+  path = %toolpath%\RunAny\RunAny.exe
+  url = %site%/%exename%.zip
+}else if(exename = "xll"){
+  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
+  url = %site%/%exename%.zip
+}else if(exename = "ffmpeg"){
   path = %exefolder%\ffmpeg.exe
   url = %site%/ffmpeg.zip
 }else if(exename = "nconvert"){
@@ -25,9 +30,6 @@ if (exename = "ffmpeg"){
   url = %site%/%exename%.zip
 }else if(exename = "PDFEdit"){
   path = %exefolder%\PDFEdit\%exename%.exe
-  url = %site%/%exename%.zip
-}else if(exename = "xll"){
-  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
   url = %site%/%exename%.zip
 }else if(exename = "主文件"){
   path = %A_Desktop%\主文件.xlsx
@@ -56,6 +58,13 @@ if (exename = "ffmpeg"){
 }else if(exename = "曾大大按键软件"){
   path = %exefolder%\多媒体\%exename%\%exename%.exe
   url = %site%/%exename%.zip
+}else if(exename = "dism++"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "Rapr驱动清理"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+  
 }else{
   path = %exefolder%\其它\%exename%\%exename%.exe
   url = %site%/%exename%.zip
@@ -143,7 +152,32 @@ try {
 return ox 
 }
 
+;获取传参的参数
+getargs2arr(ByRef args){
+arr:=[]
+  Loop, %args%
+  {
+      param := %A_Index%
+      inputpath := param
+      msgbox,%param%
+      arr := []
+      SplitPath, param, name, dir, ext, name_no_ext, drive
+      outputpath :=  inputpath
+      arr[fkeyold] := inputpath
+      arr[fkeynew] := outputpath
+      
+      a := savearr2json(arr)
+    ;tr("暂时运行结束")
+    ;exitapp
+    ;msgbox,==
+    ;发送post信息并返回，这个非常复杂,为核心主文件函数在lilyfun里
+    ;apiserver := getserverurl()
+    apiserver := "http://api7.r34.cc"
+    url := apiserver "/jb/" jbname
+    ;PostCsvAndFile(url,fkeyold,fkeynew)
 
+  }
+}
 
 
 
@@ -847,6 +881,37 @@ SmartZip(s, o, t = 4)
 
 
 
+
+
+
+
+;发送post信息并返回，这个非常复杂
+;url 是发送的url
+;fkeyold 是发送文件的信息，可为空
+;fkeynew 是接收文件的信息，可为空
+PostCsvAndFilearr(ByRef url,ByRef fkeyold,ByRef fkeynew,ByRef argarr){
+if(argarr[0]=""){
+  ;msgbox,无参数
+  PostCsvAndFile(url,fkeyold,fkeynew)
+}else{
+  ;msgbox,有参数
+  for key, param in argarr{
+      inputpath := param
+      msgbox,%param%
+      arr := []
+      SplitPath, param, name, dir, ext, name_no_ext, drive
+      outputpath :=  inputpath
+      arr[fkeyold] := inputpath
+      arr[fkeynew] := outputpath
+      a := savearr2json(arr)
+      PostCsvAndFile(url,fkeyold,fkeynew)
+  }
+}
+
+
+}
+
+
 ;发送post信息并返回，这个非常复杂
 ;url 是发送的url
 ;fkeyold 是发送文件的信息，可为空
@@ -903,6 +968,8 @@ PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
     creatfolderbyfile(newfilepath)
     writeBase64File(newfilepath,data.f64)
   }
+  
+  
 }
 
 

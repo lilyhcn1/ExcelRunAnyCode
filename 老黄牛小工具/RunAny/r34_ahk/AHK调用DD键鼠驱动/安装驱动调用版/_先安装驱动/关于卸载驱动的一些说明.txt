@@ -1,0 +1,3 @@
+安装驱动后，会出现驱动无法卸载的情况。需要先强行删除C:\Windows\System32\drivers\dd.key.94396.sys 或者 C:\Windows\System32\drivers\dd.mou.94396.sys 之后，重启电脑才会出现卸载驱动的选项。
+
+因为这两个驱动文件可能被占用着，我是用360的文件粉碎机，勾选 防止恢复 的方式来删除的

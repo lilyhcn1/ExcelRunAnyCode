@@ -1,0 +1,65 @@
+;以【;】开头代表注释
+;以【-】开头+名称表示1级分类
+-全局| public
+	复制文件路径|..\脚本文件\ahk\复制文件路径.ahk
+	F1剪贴板硬件输出文字|%A_ScriptDir%\r34_ahk\AHK调用DD键鼠驱动\安装驱动调用版\V1示例\剪贴板硬件输出文字.ahk
+	you-get|..\小工具\you-get\下载you-get.bat
+	path分享文件至微信文件助手|..\脚本文件\ahk\path分享文件至微信文件助手.ahk
+	打印3|%A_ScriptDir%\r34_ahk\系统\打印.ahk
+	
+	
+-API接口| public
+	ahk自建识别|%A_ScriptDir%\r34_ahk\截图识别（自建识别）\截图识别（自建识别）.ahk
+	截图识别到剪贴板|%A_ScriptDir%\r34_ahk\截图识别（自建识别）\截图识别到剪贴板.ahk
+	
+
+-系统(&Sys)
+	;在别名后面添加_:数字形式来透明启动应用(默认不透明,1-100是全透明到不透明)
+	记事本:88|%A_ScriptDir%\r34_ahk\系统\Notepad2.ahk
+	Everything|%A_ScriptDir%\Everything\Everything.exe
+	cmd.exe
+	远程桌面|mstsc.exe
+	结束进程|..\脚本文件\结束进程.bat
+	打印|%A_ScriptDir%\r34_ahk\系统\打印.ahk
+	重启ET|D:\老黄牛小工具\脚本文件\重启ET.bat
+	Markdown|..\小工具\MarkdownEditor.exe
+	
+	
+-视频工具|m4a mp4 mkv mp3 wav
+	视频压缩|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\视频压缩.ahk
+	视频压缩265|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\视频压缩265.ahk
+	提取音频|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\提取音频.ahk
+	多视频合并|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\多视频合并.ahk
+	视频提取|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\视频提取.ahk
+	音频转mp3|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\音频转mp3.ahk
+	Mp4转gif|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\Mp4转gif.ahk
+
+	
+-图片工具|bmp gif jpeg jpg png webp
+	图片缩小至1920|%A_ScriptDir%\r34_ahk\图片处理\缩小至1920.ahk
+	图片缩小至|%A_ScriptDir%\r34_ahk\图片处理\缩小图片至.ahk
+	图片转jpg|%A_ScriptDir%\r34_ahk\图片处理\图片转jpg.ahk
+	图片变清晰|%A_ScriptDir%\r34_ahk\图片处理\图片变清晰.ahk
+	图片转视频|%A_ScriptDir%\r34_ahk\ahk_ffmpeg\图片转视频.ahk
+	文件上传|..\脚本文件\文件上传transfer.sh.py
+	
+-pdf工具|pdf
+	PDF解密|%A_ScriptDir%\r34_ahk\pdf\PDF解密.ahk
+	PDF加密|%A_ScriptDir%\r34_ahk\pdf\PDF加密.ahk
+	PDF压缩|%A_ScriptDir%\r34_ahk\pdf\PDF压缩.ahk
+	PDF拆分|%A_ScriptDir%\r34_ahk\pdf\PDF拆分.ahk
+	PDF提取|%A_ScriptDir%\r34_ahk\pdf\PDF提取.ahk
+	PDF加水印|%A_ScriptDir%\r34_ahk\pdf\PDF加水印.ahk
+	PDF加页码|%A_ScriptDir%\r34_ahk\pdf\PDF加页码.ahk
+	PDFEdit|..\小工具\pdf\PDFEdit\PDFEdit.exe
+	PDF合并|%A_ScriptDir%\r34_ahk\pdf\PDF合并.ahk
+	PDFEdit|%A_ScriptDir%\r34_ahk\pdf\PDFEdit.ahk
+	
+
+
+-
+;1级分隔符【-】并且使下面项目都回归1级分类
+;使用【&】指定快捷键为C,忽略下面C盘的快捷键C
+我的电脑(&Z)|explorer.exe
+;以【\】结尾代表是文件夹路径
+-

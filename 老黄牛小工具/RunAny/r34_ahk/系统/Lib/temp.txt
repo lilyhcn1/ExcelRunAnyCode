@@ -1,0 +1,1 @@
+D:\老黄牛小工具\小工具\系统\openssl\openssl.exe  enc -e -des3 -a -salt -k 123 -in "D:\老黄牛小工具\RunAny\r34_ahk\系统\Lib\temp.txt" -out "D:\老黄牛小工具\RunAny\r34_ahk\系统\Lib\tempoutput.txt"

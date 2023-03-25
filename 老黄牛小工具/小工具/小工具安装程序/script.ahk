@@ -125,7 +125,7 @@ if(c4=1){
 sleep % 1000
 RunAnypath := checkandgetpath("RunAny")
 Run ,%RunAnypath%
-
+FileCreateShortcut, %RunAnypath%, %A_Desktop%\RunAny.lnk
 msgbox,RunAny已经运行,您可以按 ~ 键查看效果.
 }
 

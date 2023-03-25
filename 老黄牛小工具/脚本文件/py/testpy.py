@@ -1,7 +1,39 @@
 ﻿#一、 引用函数、库等写在最上方
 #11111111111111111111111111111111111111111111111111111111111111
-import time
-import jionlp as jio
+import openai
+def askChatGPT(messages):
+    MODEL = "gpt-3.5-turbo"
+    response = openai.ChatCompletion.create(
+        model=MODEL,
+        messages = messages,
+        temperature=0)
+    try:
+        r=response['choices'][0]['message']['content']
+    except:
+        r="返回错误，请检查网络！"
+
+    return r
+
+def transtrate(msg,flag="英文"):
+    messages=[
+            {"role": "system","content":"你是一个翻译机器人，你会帮我把以下的文本翻译为"+flag+"："},
+            {"role": "user", "content": ""+msg},
+        ]
+    return askChatGPT(messages)
+
+def chat(msg):
+    messages=[
+            {"role": "system","content":"你是一个聊天机器人。"},
+            {"role": "user", "content": ""+msg},
+        ]
+    return askChatGPT(messages)
+def rolechat(msg,flag="对联"):
+    messages=[
+            {"role": "system","content":"你是一个"+flag+"机器人"},
+            {"role": "user", "content": ""+msg},
+        ]
+    return askChatGPT(messages)
+
 
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
@@ -13,12 +45,12 @@ lilyfun.tj()
 # 二、运行出错时，默认的输入、输出的默认标题行
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
-inarr["输入时间文本"]="二三年元宵节晚上8点半"
+inarr["角色名"]="对联"
+inarr["聊天文本"]="天上一只鸟"
+inarr["chatgptkey"]="GetFromIni"
 inarr[""]=""
 inarr[""]=""
-inarr[""]=""
-inarr[""]=""
-outarr["输出时间"] = "待返回"
+outarr["AI回复"] = "待返回"
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
@@ -84,18 +116,16 @@ def main(fd2={}):
 
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
-    #inarr 输入时间文本    
-    #inarr 输出时间    
+    #inarr 角色名 聊天文本 chatgptkey  
+    #inarr AI回复    
     #fkeyold  fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
-        text =valarr["输入时间文本"]
-        res = jio.parse_time(text, time.time())
+        msg=valarr["聊天文本"]
+        flag=valarr["角色名"]
+        openai.api_key = valarr["chatgptkey"]
         
-        #print(res)
-        dt =res["time"][0]
-        arr2ret["输出时间"]=dt
-
+        arr2ret["AI回复"]="AI回复测试"
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))

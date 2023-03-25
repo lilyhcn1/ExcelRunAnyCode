@@ -122,7 +122,7 @@ runwait ,Wscript.exe %vbspath%
 
 if(c4=1){
 ; c3安装RunAny
-sleep % 2000
+sleep % 1000
 RunAnypath := checkandgetpath("RunAny")
 Run ,%RunAnypath%
 
@@ -137,11 +137,11 @@ startstr(s)
 
 if(c2=1){
 ; 使用说明的介绍
-Run ,https://github.com/lilyhcn1/ExcelRunAnyCode
+Run ,https://gitee.com/lilyhcn1/ExcelRunAnyCode
 sleep % 3000
 }
 
-sleep % 2000
+sleep % 200
 msgbox,安装完成,请使用.
 exitapp
 return

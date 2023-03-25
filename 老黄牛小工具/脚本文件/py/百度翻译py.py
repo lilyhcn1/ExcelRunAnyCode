@@ -18,8 +18,8 @@ lilyfun.tj()
 # 二、运行出错时，默认的输入、输出的默认标题行
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
-inarr["BaiduTranID1"]=""
-inarr["BaiduTranKey1"]=""
+inarr["BaiduTranID1"]="GetFromIni"
+inarr["BaiduTranKey1"]="GetFromIni"
 inarr["待译文本"]="老黄牛小工具"
 inarr[""]=""
 inarr[""]=""
@@ -31,13 +31,15 @@ outarr[""] = ""
 #文件标志
 fkeyold=""   #输入变量中，哪个是文件的标记。
 fkeynew=""   #输出变量中，哪个是文件的标记。
-updateflag="y" #是否从config更新数据的标记，一般用在密钥上。
 #2222222222222222222222222222222222222222222222222222222222222
-inarr=lilyfun.updatearrfromini(inarr,updateflag)
-outarr=lilyfun.updatearrfromini(outarr,updateflag)
+config=lilyfun.readiniconfig()
+inarr=lilyfun.updatearrfromini(inarr,config)
+
+
+
 
 def main(fd2={}):
-    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey
+    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey,config
     arr2ret,valarr,errarr = {},{},{}
     wholepath,f64="",""
     errarr=lilyfun.merge(inarr,outarr)  #合并字典
@@ -56,6 +58,8 @@ def main(fd2={}):
     try: #1.2 json64解码为jsonarr
         jsonarr = lilyfun.json64tojsonarr(json64)
         jsoncontentarr =jsonarr["contents"]
+        jsoncontentarr=lilyfun.updatearrfromini(jsoncontentarr,config)
+        jsonarr["contents"]=jsoncontentarr
         f64=lilyfun.getfd2_f64(fd2,fkeyold,jsonarr)
     except:
         errarr = lilyfun.printvalarr(errarr,"jsonarr解码错误，请检查！",prflag)
@@ -86,7 +90,7 @@ def main(fd2={}):
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
     #inarr BaiduTranID1 BaiduTranKey1 待译文本  
-    #outarr 翻译结果    
+    #inarr 翻译结果    
     #fkeyold  fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
@@ -143,6 +147,9 @@ def main(fd2={}):
     
     try:  # 运行函数,最后要生成arr2ret及f64
         f64=lilyfun.readfile2f64(new_filepath)#有新文件就读取
+        # newpath = valarr[fkeynew]
+        # if f64!="" and fkeynew!="" and fd2=={}:
+        #     lilyfun.writefile64(f64,newpath)
         lilyfun.safedel(old_filepath)
         lilyfun.safedel(new_filepath)
         arr2ret["执行结果"]="√"

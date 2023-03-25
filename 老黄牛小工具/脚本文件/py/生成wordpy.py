@@ -1,6 +1,71 @@
 ﻿#一、 引用函数、库等写在最上方
 #11111111111111111111111111111111111111111111111111111111111111
+import win32com.client as win32
+#win32com非常难安装，https://github.com/mhammond/pywin32/releases,下载正确的exe
+#如果还出错，再把C:\Users\lilyhcn\AppData\Local\Programs\Python\Python311\Lib\site-packages\pywin32_system32
+# 添加到环境变量中的path，感谢chatgpt
+import os
+from docx import Document
+# 打开 Word 应用程序,
 
+# word = win32.gencache.EnsureDispatch("Word.Application")
+
+#有bug，这个会把文本框给弄没了
+def replacenewfile(oldpath, replace_dict,newpath):
+    document = Document(oldpath)
+    for para in document.paragraphs:
+        for i in range(len(para.runs)):
+            for key, value in replace_dict.items():
+                if key in para.runs[i].text:
+                    
+                    #print(key+"-->"+value)
+                    para.runs[i].text = para.runs[i].text.replace(key, value)
+    
+
+    document.save(newpath)
+    return newpath
+
+#有bug，这个会把文本框给弄没了
+def replacenewfile2(newpath, replace_dict):
+    document = Document(newpath)
+    for para in document.paragraphs:
+        tptext=para.text
+        #print(tptext)
+        for key, value in replace_dict.items():
+            if key in tptext:
+                #print(key+"-->"+value)
+                para.text = tptext.replace(key, value)
+                # print(para.text)
+    document.save(newpath)
+    return newpath
+
+
+#有bug，这个只能替换文本框
+def checkshapetext(oldpath, replace_dict,newpath=""):
+    doc = word.Documents.Open(oldpath)
+    # 循环遍历文档中的所有形状
+    for shape in doc.Shapes:
+        # 如果形状是文本框
+        if shape.Type == 17:
+            # 获取文本框中的文本
+            text = shape.TextFrame.TextRange.Text
+
+            for key, value in replace_dict.items():
+                #print(key+"-->"+value+"----text=:"+text)
+                if key in text:
+                   
+                    new_text = text.replace(key, value)
+                    shape.TextFrame.TextRange.Text = new_text
+
+    if newpath=="":
+        newpath  =oldpath
+    # 保存修改后的文档
+    doc.SaveAs(newpath)
+
+    # 关闭 Word 文档和应用程序
+    doc.Close()
+    word.Quit()
+    return newpath
 
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
@@ -12,9 +77,9 @@ lilyfun.tj()
 # 二、运行出错时，默认的输入、输出的默认标题行
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
-inarr[""]=""
-inarr[""]=""
-inarr[""]=""
+inarr["模板路径"]="D:\\老黄牛小工具\\word模板\\座位牌3字.docx"
+inarr["生成文件路径"]="老黄牛.docx"
+inarr["姓名"]="老黄牛"
 inarr[""]=""
 inarr[""]=""
 outarr[""] = ""
@@ -23,15 +88,17 @@ outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
 #文件标志
-fkeyold=""   #输入变量中，哪个是文件的标记。
-fkeynew=""   #输出变量中，哪个是文件的标记。
-updateflag="" #是否从config更新数据的标记，一般用在密钥上。
+fkeyold="模板路径"   #输入变量中，哪个是文件的标记。
+fkeynew="生成文件路径"   #输出变量中，哪个是文件的标记。
 #2222222222222222222222222222222222222222222222222222222222222
-inarr=lilyfun.updatearrfromini(inarr,updateflag)
-outarr=lilyfun.updatearrfromini(outarr,updateflag)
+config=lilyfun.readiniconfig()
+inarr=lilyfun.updatearrfromini(inarr,config)
+
+
+
 
 def main(fd2={}):
-    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey
+    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey,config
     arr2ret,valarr,errarr = {},{},{}
     wholepath,f64="",""
     errarr=lilyfun.merge(inarr,outarr)  #合并字典
@@ -50,6 +117,8 @@ def main(fd2={}):
     try: #1.2 json64解码为jsonarr
         jsonarr = lilyfun.json64tojsonarr(json64)
         jsoncontentarr =jsonarr["contents"]
+        jsoncontentarr=lilyfun.updatearrfromini(jsoncontentarr,config)
+        jsonarr["contents"]=jsoncontentarr
         f64=lilyfun.getfd2_f64(fd2,fkeyold,jsonarr)
     except:
         errarr = lilyfun.printvalarr(errarr,"jsonarr解码错误，请检查！",prflag)
@@ -79,12 +148,13 @@ def main(fd2={}):
 
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
+    #inarr 模板路径 生成文件路径 姓名  
     #inarr     
-    #outarr     
-    #fkeyold  fkeynew  
+    #fkeyold 模板路径 fkeynew 生成文件路径 
     try:  # 运行函数,最后要生成arr2ret及f64
 
-
+        #new_filepath =checkshapetext(old_filepath,valarr,new_filepath)
+        new_filepath =replacenewfile(old_filepath,valarr,new_filepath)
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
@@ -105,6 +175,9 @@ def main(fd2={}):
     
     try:  # 运行函数,最后要生成arr2ret及f64
         f64=lilyfun.readfile2f64(new_filepath)#有新文件就读取
+        # newpath = valarr[fkeynew]
+        # if f64!="" and fkeynew!="" and fd2=={}:
+        #     lilyfun.writefile64(f64,newpath)
         lilyfun.safedel(old_filepath)
         lilyfun.safedel(new_filepath)
         arr2ret["执行结果"]="√"

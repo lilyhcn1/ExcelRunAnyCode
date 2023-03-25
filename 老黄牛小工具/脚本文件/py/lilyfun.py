@@ -13,15 +13,15 @@ import os
 from datetime import datetime
 
 
-MBPATH=r'd:/老黄牛小工具/word模板'
-JSONFILE=r'd:/老黄牛小工具/ExcelQuery/temp/temp.json'
+MBPATH=r'D://老黄牛小工具//word模板'
+JSONFILE="D://老黄牛小工具//ExcelQuery//temp//temp.json"
 
-TEMPTEXT=r'd:/老黄牛小工具/ExcelQuery/temp/temp.txt'
-INIPATH=r"D:\老黄牛小工具\配置文件\myconf.ini"
-JBPATH=r'D:\老黄牛小工具\脚本文件'
+TEMPTEXT=r'..//..//ExcelQuery//temp//temp.txt'
+INIPATH=r"..//..//配置文件//myconf.ini"
+JBPATH=r'..//..//脚本文件'
 
 FK='临时'
-
+INIUPDATEFLAG='GetFromIni'
 
         
 def savestr(str):
@@ -43,24 +43,29 @@ def readini(sec,key):
     config.read(INIPATH)
     appid = config[sec][key]
     return appid
-    
-def updatearrfromini(arr,flag=""):
+
+def readiniconfig():
+    config = configparser.ConfigParser()
+    config.read(INIPATH)
+    return config
+
+def updatearrfromini(arr,config=""):
     newarr={}
     for inkey in arr.keys():
         if inkey != "" :
             newarr[inkey]=arr[inkey]
-    arr=newarr
 
-    if flag!="":
-        config = configparser.ConfigParser()
-        config.read(r"D:\老黄牛小工具\配置文件\myconf.ini")
+    if config !="":
+        # titlepr("config更新中：",config)
         for inkey in arr.keys():
             if inkey != "" :
-                try:
-                    arr[inkey]=config['ApiKeys'][inkey]
-                except:
-                    print("从config强制更新配置["+inkey+ "]失败！~")
-    return arr
+                if arr[inkey] ==INIUPDATEFLAG:
+                    try:
+                        #titlepr("config['ApiKeys'][inkey]",config['ApiKeys'][inkey])
+                        newarr[inkey]=config['ApiKeys'][inkey]
+                    except:
+                        print("从config强制更新配置["+inkey+ "]失败！~")
+    return newarr
 
 def firstkey(arr):
     for k,v in arr.items():
@@ -83,7 +88,12 @@ def readjson(key="contents"):
         listarr=jsonarr
     return listarr
 
-
+#格式化文本的回车
+def textgx(t,flag="text"):
+    if flag=="text":
+        t=t.replace('<p>','')
+        t=t.replace('</p>','')
+    return t
 
 
 #读取txt文档,可以兼容不同的编码方式
@@ -136,25 +146,27 @@ def randfile(valarr="",fkeyold="",flag="new"):
     #print("randfile---"+"fkeyold:"+fkeyold+"flag:"+flag)
     #print(valarr)
     #print("valarr---")
+    nowpath= str(os.getcwd()) + "/"
+    
     if fkeyold=="":
-        return str(int(round(time.time() * 1000)))+".tmp"
+        return nowpath+ str(int(round(time.time() * 1000)))+".tmp"
     
     try:
         f=valarr[fkeyold]
     except:
-        return str(int(round(time.time() * 1000)))+".tmp"
+        return nowpath + str(int(round(time.time() * 1000)))+".tmp"
 
 
     fex=os.path.splitext(f)[-1]
     #print("fex---"+" fex:"+fex+" flag:"+flag)
     if flag=="new":
         #print("flag in ")
-        return str(int(round(time.time() * 1000)))+".tmpnew"+fex
+        return nowpath + str(int(round(time.time() * 1000)))+".tmpnew"+fex
     else:
         #print("flag not in ")
-        return str(int(round(time.time() * 1000)))+".tmp"+fex
+        return nowpath + str(int(round(time.time() * 1000)))+".tmp"+fex
 
-    path =str(int(round(time.time() * 1000)))+".tmp"
+    path =nowpath + str(int(round(time.time() * 1000)))+".tmp"
     return path
             
 
@@ -241,10 +253,12 @@ def readjsonarr(key="",key2=""):
 def merge(dict1, dict2):
     newdict={}
     for key in dict1.keys():
-        newdict[key]=dict1[key]
+        if key !="":
+            newdict[key]=dict1[key]
     for key in dict2.keys():
-        if key not in dict1.keys():
-            newdict[key]=dict2[key]
+        if key !="":
+            if key not in dict1.keys():
+                newdict[key]=dict2[key]
 
     return newdict 
 #字典相减
@@ -294,6 +308,17 @@ def firstval(arr):
 def savesttxt(str,path=TEMPTEXT):
     with open(path, 'w') as file_object:
         file_object.write(str)
+
+
+def startstr(str):
+    savesttxt(str)
+    os.system("cmd.exe /c start " +TEMPTEXT)
+
+def startarr(arr):
+    str=json.dumps(arr)
+    startstr(str)
+
+
 
 #保证键值存在，不存在退出
 def checkkey(arr,key):
@@ -560,12 +585,11 @@ def mboutputarr(fd2,prflag="true",arr2ret={},f64="",wpath="",keyflag="all"):
     if fd2=={}:
         savearr2json(arr2ret, keyflag)
 
-    arr2ret64 = arr2json64str(arr2ret)
+    arr2ret64 = arr2json64str(arr2ret,keyflag)
     
     fd2new={}
     fd2new["json64"]=arr2ret64
     fd2new["f64"]=f64
-
 
     if f64!="" and wpath !="":
         writefile64(f64,wpath)

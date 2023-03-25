@@ -21,13 +21,18 @@ def transtrate(msg,flag="英文"):
         ]
     return askChatGPT(messages)
 
-def chat(msg):
+def chat(msg,flag):
     messages=[
-            {"role": "system","content":"你是一个聊天机器人。"},
+            {"role": "system","content":flag},
             {"role": "user", "content": ""+msg},
         ]
     return askChatGPT(messages)
-
+def rolechat(msg,flag="对联"):
+    messages=[
+            {"role": "system","content":"你是一个"+flag},
+            {"role": "user", "content": ""+msg},
+        ]
+    return askChatGPT(messages)
 
 
 #11111111111111111111111111111111111111111111111111111111111111
@@ -42,7 +47,7 @@ lilyfun.tj()
 #输入文本
 inarr["待译文本"]="老黄牛小工具"
 inarr["语种"]="英语"
-inarr["chatgptkey"]=""
+inarr["chatgptkey"]="GetFromIni"
 inarr[""]=""
 inarr[""]=""
 outarr["翻译结果"] = "待返回"
@@ -53,13 +58,15 @@ outarr[""] = ""
 #文件标志
 fkeyold=""   #输入变量中，哪个是文件的标记。
 fkeynew=""   #输出变量中，哪个是文件的标记。
-updateflag="y" #是否从config更新数据的标记，一般用在密钥上。
 #2222222222222222222222222222222222222222222222222222222222222
-inarr=lilyfun.updatearrfromini(inarr,updateflag)
-outarr=lilyfun.updatearrfromini(outarr,updateflag)
+config=lilyfun.readiniconfig()
+inarr=lilyfun.updatearrfromini(inarr,config)
+
+
+
 
 def main(fd2={}):
-    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey
+    global inarr,outarr,prflag,fkeyold,fkeynew,mlkey,config
     arr2ret,valarr,errarr = {},{},{}
     wholepath,f64="",""
     errarr=lilyfun.merge(inarr,outarr)  #合并字典
@@ -78,6 +85,8 @@ def main(fd2={}):
     try: #1.2 json64解码为jsonarr
         jsonarr = lilyfun.json64tojsonarr(json64)
         jsoncontentarr =jsonarr["contents"]
+        jsoncontentarr=lilyfun.updatearrfromini(jsoncontentarr,config)
+        jsonarr["contents"]=jsoncontentarr
         f64=lilyfun.getfd2_f64(fd2,fkeyold,jsonarr)
     except:
         errarr = lilyfun.printvalarr(errarr,"jsonarr解码错误，请检查！",prflag)
@@ -108,7 +117,7 @@ def main(fd2={}):
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
     #inarr 待译文本 语种 chatgptkey  
-    #outarr 翻译结果    
+    #inarr 翻译结果    
     #fkeyold  fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
@@ -116,8 +125,7 @@ def main(fd2={}):
         flag=valarr["语种"]
         openai.api_key = valarr["chatgptkey"]
         r=transtrate(msg,flag)
-        #r=chat("天为什么这么蓝？")
-        arr2ret["翻译结果"]=r
+        arr2ret["AI回复"]=r
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
@@ -138,6 +146,9 @@ def main(fd2={}):
     
     try:  # 运行函数,最后要生成arr2ret及f64
         f64=lilyfun.readfile2f64(new_filepath)#有新文件就读取
+        # newpath = valarr[fkeynew]
+        # if f64!="" and fkeynew!="" and fd2=={}:
+        #     lilyfun.writefile64(f64,newpath)
         lilyfun.safedel(old_filepath)
         lilyfun.safedel(new_filepath)
         arr2ret["执行结果"]="√"

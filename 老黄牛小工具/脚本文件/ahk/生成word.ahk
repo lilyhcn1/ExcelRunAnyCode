@@ -9,12 +9,10 @@ Loop, %0%{
 }
 jbname := name_no_ext ;脚本的名字等于文件名
 
-fkeyold := ""   ;要发送的旧文件的标题行名称
-fkeynew := ""   ;要接收的新文件的标题行名称
+fkeyold := "模板路径"   ;要发送的旧文件的标题行名称
+fkeynew := "生成文件路径"   ;要接收的新文件的标题行名称
 
 ;发送post信息并返回，这个非常复杂,为核心主文件函数在lilyfun里
-apiserver := getserverurl()
-;apiserver := "http://127.0.0.1:8001"
-url := apiserver "/jb/" jbname
+url := getjburl(jbname)
 PostCsvAndFilearr(url,fkeyold,fkeynew,argarr)
 

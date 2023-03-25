@@ -1,7 +1,22 @@
 ﻿#一、 引用函数、库等写在最上方
 #11111111111111111111111111111111111111111111111111111111111111
-import time
-import jionlp as jio
+import sys
+from paddleocr import PaddleOCR, draw_ocr
+
+def ocr(path):
+    # Paddleocr目前支持的多语言语种可以通过修改lang参数进行切换
+    # 例如`ch`, `en`, `fr`, `german`, `korean`, `japan`
+    ocr = PaddleOCR(use_angle_cls=True,lang="ch",use_gpu= False)  # need to run only once to download and load model into memory
+    img_path = path
+    #img_path = sys.argv[1]
+    #'11.jpg'
+    #print(img_path)
+    s=""
+    result = ocr.ocr(img_path, cls=True,)
+    #print(result)
+    for line in result:
+        s=s+str(line[1][0])+'\n'
+    return s
 
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
@@ -13,18 +28,18 @@ lilyfun.tj()
 # 二、运行出错时，默认的输入、输出的默认标题行
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
-inarr["输入时间文本"]="二三年元宵节晚上8点半"
+inarr["图片地址"]="D:\\老黄牛小工具\\word模板\\银行卡.jpg"
 inarr[""]=""
 inarr[""]=""
 inarr[""]=""
 inarr[""]=""
-outarr["输出时间"] = "待返回"
+outarr["识别结果"] = "待返回"
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
 #文件标志
-fkeyold=""   #输入变量中，哪个是文件的标记。
+fkeyold="图片地址"   #输入变量中，哪个是文件的标记。
 fkeynew=""   #输出变量中，哪个是文件的标记。
 #2222222222222222222222222222222222222222222222222222222222222
 config=lilyfun.readiniconfig()
@@ -84,18 +99,12 @@ def main(fd2={}):
 
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
-    #inarr 输入时间文本    
-    #inarr 输出时间    
-    #fkeyold  fkeynew  
+    #inarr 图片地址    
+    #inarr 识别结果    
+    #fkeyold 图片地址 fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
-        text =valarr["输入时间文本"]
-        res = jio.parse_time(text, time.time())
-        
-        #print(res)
-        dt =res["time"][0]
-        arr2ret["输出时间"]=dt
-
+        arr2ret["识别结果"]=ocr(old_filepath)
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))

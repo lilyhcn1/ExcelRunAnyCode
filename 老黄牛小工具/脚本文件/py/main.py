@@ -283,13 +283,16 @@ def gn(request:Request,gn_type1:Union[str, None] = ""):
     else:
        return "没有该脚本！"
 
-
+    print("jb get运行0")
     try: #怕执行出错
-  
-        exec("import " + pyfun)
-        input1 = eval(pyfun).inarr
-        fkeyold = eval(pyfun).fkeyold
-        fkeynew = eval(pyfun).fkeynew
+        try:
+            exec("import " + pyfun)
+            input1 = eval(pyfun).inarr
+            fkeyold = eval(pyfun).fkeyold
+            fkeynew = eval(pyfun).fkeynew
+        except:
+            print("导入函数出错，可能是引用了多线程函数的原因！~")
+            return "导入函数出错，可能是引用了多线程函数的原因！~"
 
         print("jb get运行1")
         try:

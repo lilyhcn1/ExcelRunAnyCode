@@ -7,8 +7,13 @@ exefolder = D:\老黄牛小工具\小工具
 site = http://pub.r34.cc/toolsoft
 site2 = http://nat.r34.cc/toolsoft
 
-
-if (exename = "ffmpeg"){
+if (exename = "RunAny"){
+  path = %toolpath%\RunAny\RunAny.exe
+  url = %site%/%exename%.zip
+}else if(exename = "xll"){
+  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
+  url = %site%/%exename%.zip
+}else if(exename = "ffmpeg"){
   path = %exefolder%\ffmpeg.exe
   url = %site%/ffmpeg.zip
 }else if(exename = "nconvert"){
@@ -25,9 +30,6 @@ if (exename = "ffmpeg"){
   url = %site%/%exename%.zip
 }else if(exename = "PDFEdit"){
   path = %exefolder%\PDFEdit\%exename%.exe
-  url = %site%/%exename%.zip
-}else if(exename = "xll"){
-  path = %toolpath%\Excel插件\老黄牛小工具-64位.xll
   url = %site%/%exename%.zip
 }else if(exename = "主文件"){
   path = %A_Desktop%\主文件.xlsx
@@ -56,10 +58,20 @@ if (exename = "ffmpeg"){
 }else if(exename = "曾大大按键软件"){
   path = %exefolder%\多媒体\%exename%\%exename%.exe
   url = %site%/%exename%.zip
+}else if(exename = "dism++"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "Rapr驱动清理"){
+  path = %exefolder%\系统\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
+}else if(exename = "WinSCP"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
 }else{
   path = %exefolder%\其它\%exename%\%exename%.exe
   url = %site%/%exename%.zip
 }
+
 
 
 if not FileExist(path){
@@ -119,9 +131,14 @@ returnfirstvalue(ByRef arr){
 
 ; 函数：找到数组的第一个key
 returnfirstkey(ByRef arr){
+;msgbox ，"returnfirsrt"
   For index, value in arr{
-    return index
+  ;msgbox,"index is " %index%" val is " %value%
+    if(index !=""){
+      return index
+    }
   }
+  return "error"
 }
 
 ;获取excel等obj，这样各个人都可以用。
@@ -216,7 +233,13 @@ val :=arr[k1][k2]
 return val
 }
 
-
+; 函数：从json中的contents中读取键值
+readjsonarr(){
+  FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+  parsed := JSON.Load(jsonstr)
+  img1 := parsed["contents"]
+  return img1
+}
 ; 函数：从json中的contents中读取键值
 readjsonconkey(ByRef key){
   ;读取文件
@@ -319,6 +342,11 @@ readtext2(File){
 	FileRead, Bin, *c %File%
 	return Bin
 }
+
+
+
+
+
 ; 函数：get方式获取返回值
 savearr2json(ByRef arr, ByRef wtype := "all", ByRef code := "0"){
 ;构造excel需要的数组
@@ -332,7 +360,6 @@ arr2["contents"] := arr
 stringified := JSON.Dump(arr2,, 4)
 FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
 FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
-
 }
 
 ; 函数：get方式获取返回值
@@ -355,6 +382,47 @@ FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
 
 }
 
+
+; 函数：get方式获取返回值
+updatekeyvaltojson(ByRef key, ByRef val){
+;构造excel需要的数组
+FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+arr2 := JSON.Load(jsonstr)
+
+arr2["contents"][key] := val
+;将构造好的数组写入文本
+stringified := JSON.Dump(arr2,, 4)
+FileDelete, d:\老黄牛小工具\ExcelQuery\temp\temp.json
+FileAppend,%stringified%,d:\老黄牛小工具\ExcelQuery\temp\temp.json
+}
+updatefromini(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
+arr := readjsonarr()
+for key, param in arr{
+    if(arr[key]=="GetFromIni"){
+        IniRead, keyval, %myconinifile%, ApiKeys, %key%
+      if (keyval != "ERROR"){
+            updatekeyvaltojson(key, keyval)
+      }else{
+          msgbox,请更新 "D:\老黄牛小工具\配置文件\myconf.ini" 中的【ApiKeys】中的【%key%】
+          exitapp
+      }
+    }   
+}
+
+return 111
+}
+
+
+; 函数：get方式获取返回值
+arrupdatefromconfigini(s, sec, key, myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
+
+if (strlen(s) >99 or strlen(s) =0){
+    s := readini(sec,key, myconinifile)
+}
+
+return s
+
+}
 Time_unix2human(time)
 {
         human=19700101000000
@@ -524,26 +592,6 @@ arrupdatefromini(arr, runtime := 30, myconinifile := "D:\老黄牛小工具\ExcelQuery
 }
 
 ; 函数：get方式获取返回值
-arrupdatefromconfigini(s, sec, key, myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
-
-if (strlen(s) >99 or strlen(s) =0){
-    s := readini(sec,key, myconinifile)
-}
-
-return s
-
-}
-; 函数：get方式获取返回值
-inierrortip(s, sec, key, myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
-if (strlen(s) >99 or strlen(s) =0){
-    msgbox, "%myconinifile% 不存在【%sec%】【 %key% 】"
-}
-return s
-
-}
-
-
-; 函数：get方式获取返回值
 arrupdate(arr, runtime := 30, port := 5555){
 
 SetBatchLines -1                       ; 速度最大化
@@ -634,6 +682,15 @@ run,%path%
 
 }
 
+;把字符串写到记事本中，方便复制
+clipandtemp(ByRef str){
+path :="d:\老黄牛小工具\ExcelQuery\temp\temp.txt"
+FileDelete, %path%
+FileAppend,%str%,%path%,utf-8
+clipboard = %str%
+}
+
+
 
 ;-- 获取Excel窗口的COM对象  By FeiYue
 Excel_Get(WinTitle="ahk_class XLMAIN")
@@ -690,22 +747,26 @@ readFile(File){
 	B64Data := Base64Enc(Bin, nBytes)
 	return B64Data
 }
-getserverurl(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
-
+getjburl(jbname, myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
+IniRead, jbserver, %myconinifile%, ServerList, %jbname%
 IniRead, server1, %myconinifile%, ApiServer, server1
-
-if(server1 ="ERROR"){
-     msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
+;IniRead, server2, %myconinifile%, ApiServer, server2
+if(jbserver ="ERROR"){
+    if(server1 ="ERROR"){
+         msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
+    }else{
+          server := server1
+    }
 }else{
-      server := server1
+      server := jbserver
+}
+url := server "/jb/" jbname
+return url
 }
 
-return server
-}
 
 
-
-getserverurl2(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
+getserverurl(myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini", server:= "http://api1.r34.cc"){
 
 if FileExist(myconinifile){
 IniRead, server1, %myconinifile%, ApiServer, server1
@@ -714,20 +775,21 @@ IniRead, server2, %myconinifile%, ApiServer, server2
 ;msgbox % server2
 if(server1 ="ERROR"){
     msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
-    }else{
-    if(InternetCheckConnection(server1)){
-      server := server1
-    }else if (InternetCheckConnection(server1)){
-      server := server2
-    }
-  }
 }
-if( server=""){
+    ;else{
+    ;if(InternetCheckConnection(server1)){
+    ;  server := server1
+    ;}else if (InternetCheckConnection(server1)){
+    ;  server := server2
+    ;}
+  ;}
+}
+if( server1=""){
    msgbox , %myconinifile% 中的相关配置不存在，请确保【ApiServer】节中的server1存在！~
 }
 
 
-return server
+return server1
 
 }
 ;测试网页是否正常
@@ -895,12 +957,13 @@ SmartZip(s, o, t = 4)
 
 
 
-
 ;发送post信息并返回，这个非常复杂
 ;url 是发送的url
 ;fkeyold 是发送文件的信息，可为空
 ;fkeynew 是接收文件的信息，可为空
 PostCsvAndFilearr(ByRef url,ByRef fkeyold,ByRef fkeynew,ByRef argarr){
+;强制更新ini中的数值
+updatefromini()
 if(argarr[0]=""){
   ;msgbox,无参数
   PostCsvAndFile(url,fkeyold,fkeynew)
@@ -908,16 +971,14 @@ if(argarr[0]=""){
   ;msgbox,有参数
   for key, param in argarr{
       inputpath := param
-
+      msgbox,%param%
       arr := []
       SplitPath, param, name, dir, ext, name_no_ext, drive
       outputpath :=  inputpath
       arr[fkeyold] := inputpath
       arr[fkeynew] := outputpath
       a := savearr2json(arr)
-      ;msgbox,%param%
       PostCsvAndFile(url,fkeyold,fkeynew)
-
   }
 }
 
@@ -930,6 +991,9 @@ if(argarr[0]=""){
 ;fkeyold 是发送文件的信息，可为空
 ;fkeynew 是接收文件的信息，可为空
 PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
+;强制更新ini中的数值
+updatefromini()
+
  tempjsonpath := "d:\老黄牛小工具\ExcelQuery\temp\temp.json"
  tempjsonpath2 := "d:\老黄牛小工具\ExcelQuery\temp\temp2.json"
  

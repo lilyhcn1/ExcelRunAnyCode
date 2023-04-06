@@ -64,11 +64,14 @@ if (exename = "RunAny"){
 }else if(exename = "Rapr驱动清理"){
   path = %exefolder%\系统\%exename%\%exename%.exe
   url = %site%/%exename%.zip
-  
+}else if(exename = "WinSCP"){
+  path = %exefolder%\网络\%exename%\%exename%.exe
+  url = %site%/%exename%.zip
 }else{
   path = %exefolder%\其它\%exename%\%exename%.exe
   url = %site%/%exename%.zip
 }
+
 
 
 if not FileExist(path){
@@ -128,9 +131,14 @@ returnfirstvalue(ByRef arr){
 
 ; 函数：找到数组的第一个key
 returnfirstkey(ByRef arr){
+;msgbox ，"returnfirsrt"
   For index, value in arr{
-    return index
+  ;msgbox,"index is " %index%" val is " %value%
+    if(index !=""){
+      return index
+    }
   }
+  return "error"
 }
 
 ;获取excel等obj，这样各个人都可以用。
@@ -394,6 +402,9 @@ for key, param in arr{
         IniRead, keyval, %myconinifile%, ApiKeys, %key%
       if (keyval != "ERROR"){
             updatekeyvaltojson(key, keyval)
+      }else{
+          msgbox,请更新 "D:\老黄牛小工具\配置文件\myconf.ini" 中的【ApiKeys】中的【%key%】
+          exitapp
       }
     }   
 }
@@ -402,6 +413,16 @@ return 111
 }
 
 
+; 函数：get方式获取返回值
+arrupdatefromconfigini(s, sec, key, myconinifile := "D:\老黄牛小工具\配置文件\myconf.ini"){
+
+if (strlen(s) >99 or strlen(s) =0){
+    s := readini(sec,key, myconinifile)
+}
+
+return s
+
+}
 Time_unix2human(time)
 {
         human=19700101000000
@@ -660,6 +681,15 @@ FileAppend,%str%,%path%,utf-8
 run,%path%
 
 }
+
+;把字符串写到记事本中，方便复制
+clipandtemp(ByRef str){
+path :="d:\老黄牛小工具\ExcelQuery\temp\temp.txt"
+FileDelete, %path%
+FileAppend,%str%,%path%,utf-8
+clipboard = %str%
+}
+
 
 
 ;-- 获取Excel窗口的COM对象  By FeiYue
@@ -927,7 +957,6 @@ SmartZip(s, o, t = 4)
 
 
 
-
 ;发送post信息并返回，这个非常复杂
 ;url 是发送的url
 ;fkeyold 是发送文件的信息，可为空
@@ -962,6 +991,9 @@ if(argarr[0]=""){
 ;fkeyold 是发送文件的信息，可为空
 ;fkeynew 是接收文件的信息，可为空
 PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
+;强制更新ini中的数值
+updatefromini()
+
  tempjsonpath := "d:\老黄牛小工具\ExcelQuery\temp\temp.json"
  tempjsonpath2 := "d:\老黄牛小工具\ExcelQuery\temp\temp2.json"
  

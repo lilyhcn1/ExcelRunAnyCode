@@ -47,6 +47,7 @@ FileRead, jsonstr, path
 FileRead, jsonstr, d:\老黄牛小工具\ExcelQuery\temp\temp.json
 parsed := JSON.Load(jsonstr)
 path := parsed["now_val"]
+;msgbox , ==
 excelpath :=returnexcelpath(parsed)
 path2 = %excelpath%\%path%
 path3 = %excelpath%\..\%path%
@@ -57,6 +58,7 @@ path5 = %excelpath%\output\%path%
 
 if FileExist(path){
     pathnew := path
+    ;msgbox, 1 %pathnew%
     run,%pathnew%
 }else if FileExist(path2){
     pathnew := path2
@@ -71,11 +73,12 @@ if FileExist(path){
     pathnew := path5
     run,%pathnew%
 }
+
 if (InStr(path, "http")){
   run,%path%
 }
 
-
+Sleep 500
 ;msgbox,%pathnew%
 
 

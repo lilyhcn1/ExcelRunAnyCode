@@ -13,11 +13,11 @@ lilyfun.tj()
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
 inarr["模糊图片地址"]="D:\\老黄牛小工具\\word模板\\笑脸.jpg"
-inarr["清晰图片地址"]="D:\\老黄牛小工具\\ExcelQuery\\temp\\清晰图片.jpg"
 inarr[""]=""
 inarr[""]=""
 inarr[""]=""
-outarr[""] = ""
+inarr[""]=""
+outarr["清晰图片地址"] = "D:\\老黄牛小工具\\ExcelQuery\\temp\\清晰图片.jpg"
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
@@ -83,8 +83,8 @@ def main(fd2={}):
 
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
-    #inarr 模糊图片地址 清晰图片地址   
-    #inarr     
+    #inarr 模糊图片地址    
+    #inarr 清晰图片地址    
     #fkeyold 模糊图片地址 fkeynew 清晰图片地址 
     try:  # 运行函数,最后要生成arr2ret及f64
 

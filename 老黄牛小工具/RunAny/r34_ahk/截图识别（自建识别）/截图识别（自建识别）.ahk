@@ -7,15 +7,15 @@ toolpath := nowpath "\Lib\"
 tempjpg := toolpath "temp.jpg"
 temptxt := toolpath "temp.txt"
 
-#Include ..\..\Lib\Gdip选框截图.ahk
+#Include ..\Lib\Gdip选框截图.ahk
 
 选框并截图(tempjpg)
 
 ;-----------------------------api区域------------------------
 
 #SingleInstance, Force
-#Include ..\..\Lib\JSON.ahk
-#Include ..\..\Lib\lilyfun.ahk
+#Include ..\Lib\JSON.ahk
+#Include ..\Lib\lilyfun.ahk
 
 SetWorkingDir %A_ScriptDir%
 ;-------------0.引用函数----------

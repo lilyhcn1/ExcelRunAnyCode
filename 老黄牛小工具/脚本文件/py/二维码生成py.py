@@ -18,7 +18,7 @@ inarr[""]=""
 inarr[""]=""
 inarr[""]=""
 inarr[""]=""
-outarr["文件名"] = "D:\\老黄牛小工具\\ExcelQuery\\temp\\二维码.jpg"
+inarr["文件名"] = "D:\\老黄牛小工具\\ExcelQuery\\temp\\二维码.png"
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
@@ -93,6 +93,7 @@ def main(fd2={}):
         png = qrcode.make(img1)
         #print("new_file: "+new_file)
         png.save(new_filepath)
+        # print(new_filepath)
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))

@@ -282,7 +282,14 @@ def gn(request:Request,gn_type1:Union[str, None] = ""):
        pyfun=gn_type1+"py"
     else:
        return "没有该脚本！"
-
+    
+    print(pyfun)
+    exec("import " + pyfun)
+    
+    input1 = eval(pyfun).inarr
+    fkeyold = eval(pyfun).fkeyold
+    fkeynew = eval(pyfun).fkeynew
+    
     print("jb get运行0")
     try: #怕执行出错
         try:

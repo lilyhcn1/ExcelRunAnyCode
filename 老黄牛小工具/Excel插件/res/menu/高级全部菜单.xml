@@ -20,9 +20,7 @@
 					<dynamicMenu id="系统功能" size="large" image="system" label="系统功能" getContent="getContent"/>
 					<dynamicMenu id="表格增强" size="large" image="excel" label="表格增强" getContent="getContent"/>
 					<dynamicMenu id="文件管理" size="large" image="文件管理" label="文件管理" getContent="getContent"/>
-					<dynamicMenu id="发送信息" size="large" image="message" label="发送信息" getContent="getContent"/>
 					<dynamicMenu id="调试设定" size="large" image="调试设定" label="调试设定" getContent="getContent"/>
-					<dynamicMenu id="代码生成" size="large" image="代码生成" label="代码生成" getContent="getContent"/>
 				</group>
 				<group id="grp20" label="数据录入">
 					
@@ -50,8 +48,8 @@
 					<button id="转成相对路径" size="normal" image="转成相对路径" label="转成相对路径" onAction="MainButtonAction" />
 					<button id="网络表格" size="normal" image="网络表格" label="网络表格" onAction="MainButtonAction" />
 				</group>
-				<group id="grp40" label="代码生成">
-					<button id="VBA_单脚本批量替换并执行文件" size="normal" image="单脚本运行" label="单脚本运行" onAction="MainButtonAction" />
+				<group id="grp40" label="发送消息代码">
+					<button id="VBA_单脚本批量替换并执行文件" size="large" image="单脚本运行" label="批量运行" onAction="MainButtonAction" />
 					<button id="VBA_多脚本批量替换并执行文件" size="normal" image="多脚本运行" label="多脚本运行" onAction="MainButtonAction" />
 					<button id="初始化简单代码生成器" size="normal" image="初始化表格" label="发消息表格" onAction="MainButtonAction" />
 				</group>		

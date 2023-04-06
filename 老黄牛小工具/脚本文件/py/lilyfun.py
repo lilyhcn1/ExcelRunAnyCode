@@ -40,13 +40,13 @@ def get_file_content(filePath):
 
 def readini(sec,key):
     config = configparser.ConfigParser()
-    config.read(INIPATH)
+    config.read(INIPATH,encoding='utf-8')
     appid = config[sec][key]
     return appid
 
 def readiniconfig():
     config = configparser.ConfigParser()
-    config.read(INIPATH)
+    config.read(INIPATH, encoding='utf-8')
     return config
 
 def updatearrfromini(arr,config=""):

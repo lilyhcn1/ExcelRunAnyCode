@@ -1,39 +1,64 @@
 ﻿#一、 引用函数、库等写在最上方
 #11111111111111111111111111111111111111111111111111111111111111
+import os
+
 import openai
-def askChatGPT(messages):
-    MODEL = "gpt-3.5-turbo"
-    response = openai.ChatCompletion.create(
-        model=MODEL,
-        messages = messages,
-        temperature=0)
-    try:
-        r=response['choices'][0]['message']['content']
-    except:
-        r="返回错误，请检查网络！"
+import requests
+import time
+import json
+import time
 
-    return r
+#openai.api_base = "https://api.gptapi.us/v1/"
+#https://api.gptapi.us/
+def chat_completions3(messages,api_key="",base_url="https://api.gptapi.us/v1/",model="gpt-3.5-turbo"):
+    openai.api_base = base_url
+    openai.api_key = api_key
+    print(messages)
+    print(openai)
+    chat = openai.ChatCompletion.create(
+          model=model, messages=messages
+       )
+    answer = chat.choices[0].message.content
+    
+    
+    return answer
 
-def transtrate(msg,flag="英文"):
+
+
+
+
+def askChatGPT(query,api_key="",base_url="https://api.gptapi.us/v1/",model="gpt-3.5-turbo"):
+    messages=[
+        {"role": "system","content":"你是一个有用的助手。"},
+        {"role": "user", "content": ""+query},
+    ]
+    return chat_completions3(messages,api_key,base_url,model)
+
+
+def transtrate(msg,flag="英文",api_key="",base_url="https://api.gptapi.us/v1/",model="gpt-3.5-turbo"):
     messages=[
             {"role": "system","content":"你是一个翻译机器人，你会帮我把以下的文本翻译为"+flag+"："},
             {"role": "user", "content": ""+msg},
         ]
-    return askChatGPT(messages)
+    return chat_completions3(messages,api_key,base_url,model)
 
-def chat(msg,flag):
+
+
+
+def chat(msg,flag,api_key="",base_url="https://api.gptapi.us/v1/",model="gpt-3.5-turbo"):
     messages=[
             {"role": "system","content":flag},
             {"role": "user", "content": ""+msg},
         ]
-    return askChatGPT(messages)
-def rolechat(msg,flag="对联"):
+    return chat_completions3(messages,api_key,base_url,model)
+
+
+def rolechat(msg,flag="对联",api_key="",base_url="https://api.gptapi.us/v1/",model="gpt-3.5-turbo"):
     messages=[
-            {"role": "system","content":"你是一个"+flag},
+            {"role": "system","content":flag},
             {"role": "user", "content": ""+msg},
         ]
-    return askChatGPT(messages)
-
+    return chat_completions3(messages,api_key,base_url,model)
 
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
@@ -45,11 +70,11 @@ lilyfun.tj()
 # 二、运行出错时，默认的输入、输出的默认标题行
 #2222222222222222222222222222222222222222222222222222222222222
 #输入文本
-inarr["角色名"]="对联"
+inarr["角色名"]="你是对联机器人。"
 inarr["聊天文本"]="天上一只鸟"
 inarr["chatgptkey"]="GetFromIni"
-inarr[""]=""
-inarr[""]=""
+inarr["base_url"]="https://api.gptapi.us/v1/"
+inarr["model"]="gpt-3.5-turbo"
 outarr["AI回复"] = "待返回"
 outarr[""] = ""
 outarr[""] = ""
@@ -106,8 +131,8 @@ def main(fd2={}):
     
     # ----------------[4/4]调用函数并生成arr2ret及f64 -------------------
     try:  # 运行函数,最后要生成arr2ret及f64
-        old_filepath=lilyfun.randfile(valarr,fkeyold,"old")
-        new_filepath=lilyfun.randfile(jsoncontentarr,fkeynew,"new")
+        old_filepath=lilyfun.randfile(inarr,fkeyold,"old")
+        new_filepath=lilyfun.randfile(outarr,fkeynew,"new")
         old_filepath=lilyfun.writefile64(f64,old_filepath)
     except:  # 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]读写文件错误。",prflag)
@@ -116,15 +141,18 @@ def main(fd2={}):
 
     #3333333333333333333333333333333333333333333333333333
     #txt=mainrun(valarr,old_filepath,new_filepath)
-    #inarr 角色名 聊天文本 chatgptkey  
+    #inarr 角色名 聊天文本 chatgptkey base_url model
     #inarr AI回复    
     #fkeyold  fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
         msg=valarr["聊天文本"]
         flag=valarr["角色名"]
-        openai.api_key = valarr["chatgptkey"]
-        r=rolechat(msg,flag)
+        api_key = valarr["chatgptkey"]
+        base_url=valarr["base_url"]
+        model=valarr["model"]
+
+        r=rolechat(msg,flag,api_key,base_url,model)
         arr2ret["AI回复"]=r
 
     except Exception as e:# 保存函数出错后的执行结果
@@ -170,7 +198,8 @@ def main(fd2={}):
         return lilyfun.mboutputarr(fd2,prflag,arr2ret,f64,wholepath,"key")
     except:  # 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"写入文件出错，请检查值是否正确。",prflag)
-        lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)       
+        #lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)      
+        print("最后写入文件出错，请检查值是否正确。\n"+traceback.format_exc())  
         return lilyfun.mboutputarr(fd2,prflag,valarr)
 
 

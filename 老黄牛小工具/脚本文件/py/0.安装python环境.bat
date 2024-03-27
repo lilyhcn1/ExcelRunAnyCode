@@ -1,68 +1,68 @@
-ï»¿python -m pip install requests==2.20.1 -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install qrcode  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install fastapi[all] -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install chardet -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install websocket -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install -U jiagu -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install xlwt -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+@echo off
+pip install requests
 
-python -m pip install lxml -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem äººå·¥æ™ºèƒ½åˆ†è¯
-python -m pip install jiagu -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
 
-rem äººå·¥æ™ºèƒ½åˆ†è¯2ï¼Œåœ°å€è§£æžç”¨
-python -m pip install jionlp -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install qrcode  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install goto-statement 
+easy_install -i https://pypi.tuna.tsinghua.edu.cn/simple/ pip
+pip install reportlab  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install --upgrade pip   -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install pyperclib -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install win32clipboard -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install tempfile -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install urllib.request -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install convertapi -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install baidu-aip -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install python-docx -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install requests_html -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install time -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install PyAudio -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install wave -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install -i https://mirrors.tencent.com/pypi/simple/ --upgrade tencentcloud-sdk-python
+pip install eyed3  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install PyPDF2  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install PyQt5  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install pathlib  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install PyQtWebEngine -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install Converter -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install util -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
 
-python -m pip install reportlab  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install pyperclib -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install win32clipboard -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install tempfile -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install urllib.request -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install convertapi -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install baidu-aip -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install python-docx -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install requests_html -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install time -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install PyAudio -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install wave -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install eyed3  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install PyPDF2  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install smtplib -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install util -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install pypinyin -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install docxtpl -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install sxtwl -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install aiofiles
-
-python -m pip install Pillow -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-python -m pip install pyzbar -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
- 
+pip install sxtwl -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
+pip install pypinyin -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host mirrors.aliyun.com
 
 
 
-rem åº”è¯¥ç”¨ä¸åˆ°
-rem python -m pip install -i https://mirrors.tencent.com/pypi/simple/ --upgrade tencentcloud-sdk-python
-rem easy_install -i https://pypi.tuna.tsinghua.edu.cn/simple/ python -m pip
-rem python -m pip install PyQt5  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem python -m pip install pathlib  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem python -m pip install PyQtWebEngine -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem python -m pip install Converter -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem python -m pip install jinja2==3.0.3
+
+pip install playsound  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install pygame  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install openai  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install wakeonlan  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install asyncio  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install edge_tts  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+
+
+pip install pywin32 -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install pywintypes -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install pythoncom -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install pyautogui -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install pyperclip -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install chardet  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
+pip install configparser  -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
 
 
 
-rem python -m pip install easyocr -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
-rem easyocrå¾ˆå¤§ï¼Œ300Må·¦å³ï¼Œè¿˜è¦å®‰è£…VC_redist.x64.exe
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ ä¾èµ–çŽ¯å¢ƒå®‰è£…å®Œæ¯•!~
-echo ^_^ win32comå¦‚æžœå®‰è£…ä¸é¡ºåˆ©ï¼Œå¯ä»¥ä¸‹è½½å¦å¤–çš„å•ç‹¬å®‰è£…åŒ…ã€‚
-echo ^_^ å¦‚æžœè¦ç”Ÿæˆwordæ–‡æœ¬æ¡†çš„åŠŸèƒ½ï¼Œè¯·å®‰è£…åŽŸè£…çš„office.
-echo ^_^ fastapiç»å¸¸ä¼šå¼‚å¸¸é€€å‡ºï¼Œå»ºè®®å®‰è£…alwayupæ¥å¯åŠ¨è¿™ä¸ªæœåŠ¡ã€‚
-echo ^_^ fastapiæœ€å¥½ç”¨ç®¡ç†å‘˜è¿è¡Œï¼Œå¦åˆ™win32comçš„è°ƒç”¨ä¼šå‡ºé”™ã€‚
+
+
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ ÒÀÀµ»·¾³°²×°Íê±Ï!~
+echo ^_^ win32comÈç¹û°²×°²»Ë³Àû£¬¿ÉÒÔÏÂÔØÁíÍâµÄµ¥¶À°²×°°ü¡£
+echo ^_^ Èç¹ûÒªÉú³ÉwordÎÄ±¾¿òµÄ¹¦ÄÜ£¬Çë°²×°Ô­×°µÄoffice.
+echo ^_^ fastapi¾­³£»áÒì³£ÍË³ö£¬½¨Òé°²×°alwayupÀ´Æô¶¯Õâ¸ö·þÎñ¡£
+echo ^_^ fastapi×îºÃÓÃ¹ÜÀíÔ±ÔËÐÐ£¬·ñÔòwin32comµÄµ÷ÓÃ»á³ö´í¡£
 
 
 choice /t 9 /d y /n >nul

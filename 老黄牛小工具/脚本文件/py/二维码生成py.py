@@ -18,7 +18,7 @@ inarr[""]=""
 inarr[""]=""
 inarr[""]=""
 inarr[""]=""
-inarr["文件名"] = "D:\\老黄牛小工具\\ExcelQuery\\temp\\二维码.png"
+outarr["文件名"] = "D:\\老黄牛小工具\\ExcelQuery\\temp\\二维码.png"
 outarr[""] = ""
 outarr[""] = ""
 outarr[""] = ""
@@ -74,8 +74,8 @@ def main(fd2={}):
     
     # ----------------[4/4]调用函数并生成arr2ret及f64 -------------------
     try:  # 运行函数,最后要生成arr2ret及f64
-        old_filepath=lilyfun.randfile(valarr,fkeyold,"old")
-        new_filepath=lilyfun.randfile(jsoncontentarr,fkeynew,"new")
+        old_filepath=lilyfun.randfile(inarr,fkeyold,"old")
+        new_filepath=lilyfun.randfile(outarr,fkeynew,"new")
         old_filepath=lilyfun.writefile64(f64,old_filepath)
     except:  # 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]读写文件错误。",prflag)
@@ -93,7 +93,6 @@ def main(fd2={}):
         png = qrcode.make(img1)
         #print("new_file: "+new_file)
         png.save(new_filepath)
-        # print(new_filepath)
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
@@ -138,7 +137,8 @@ def main(fd2={}):
         return lilyfun.mboutputarr(fd2,prflag,arr2ret,f64,wholepath,"key")
     except:  # 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"写入文件出错，请检查值是否正确。",prflag)
-        lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)       
+        #lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)      
+        print("最后写入文件出错，请检查值是否正确。\n"+traceback.format_exc())  
         return lilyfun.mboutputarr(fd2,prflag,valarr)
 
 

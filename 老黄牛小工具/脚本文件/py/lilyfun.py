@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- 三思网络(r34.cc) -*-
+#import traceback
+#    except Exception as e:
+#        print("---------- 执行出错，请检查! ---------\n"+traceback.format_exc())
+
 from urllib import request
 import urllib.parse
 import os,os.path,json,sys
@@ -11,6 +15,11 @@ import configparser
 import chardet,time,subprocess
 import os
 from datetime import datetime
+import random
+import pyautogui,pyperclip
+import traceback
+
+
 
 
 MBPATH=r'D://老黄牛小工具//word模板'
@@ -37,34 +46,62 @@ def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
         return fp.read()
 
+def getjsontype(arr):
+    curlurltemp=""
+    for key in arr:
+        curlurltemp =curlurltemp+ "\""+key+ "\"" +":"+ "\""+arr[key]+ "\""+", "
+    curlurltemp=remove_last_segment(curlurltemp,", ")
+    return curlurltemp
+def remove_last_segment(input_string, target_string):
+    # 检查输入字符串是否以目标字符串结尾
+    if input_string.endswith(target_string):
+        # 获取输入字符串的长度和目标字符串的长度
+        input_length = len(input_string)
+        target_length = len(target_string)
+        
+        # 计算最后一段的起始索引位置
+        last_segment_start = input_length - target_length
+        
+        # 截取去除最后一段后的字符串并返回
+        return input_string[:last_segment_start].strip()
+    
+    # 如果输入字符串不以目标字符串结尾，则返回原始字符串
+    return input_string
+
 
 def readini(sec,key):
     config = configparser.ConfigParser()
-    config.read(INIPATH,encoding='utf-8')
+    config.read(INIPATH)
     appid = config[sec][key]
     return appid
 
 def readiniconfig():
-    config = configparser.ConfigParser()
-    config.read(INIPATH, encoding='utf-8')
+    try:
+        config = configparser.ConfigParser()
+        config.read(INIPATH)
+    except:
+        config="error"
     return config
 
 def updatearrfromini(arr,config=""):
-    newarr={}
-    for inkey in arr.keys():
-        if inkey != "" :
-            newarr[inkey]=arr[inkey]
-
-    if config !="":
-        # titlepr("config更新中：",config)
+    try:
+        newarr={}
         for inkey in arr.keys():
             if inkey != "" :
-                if arr[inkey] ==INIUPDATEFLAG:
-                    try:
-                        #titlepr("config['ApiKeys'][inkey]",config['ApiKeys'][inkey])
-                        newarr[inkey]=config['ApiKeys'][inkey]
-                    except:
-                        print("从config强制更新配置["+inkey+ "]失败！~")
+                newarr[inkey]=arr[inkey]
+
+        if config !="":
+            # titlepr("config更新中：",config)
+            for inkey in arr.keys():
+                if inkey != "" :
+                    if arr[inkey] ==INIUPDATEFLAG:
+                        try:
+                            #titlepr("config['ApiKeys'][inkey]",config['ApiKeys'][inkey])
+                            newarr[inkey]=config['ApiKeys'][inkey]
+                        except:
+                            print("从config强制更新配置["+inkey+ "]失败！~")
+    except:
+        newarr=arr
     return newarr
 
 def firstkey(arr):
@@ -88,12 +125,7 @@ def readjson(key="contents"):
         listarr=jsonarr
     return listarr
 
-#格式化文本的回车
-def textgx(t,flag="text"):
-    if flag=="text":
-        t=t.replace('<p>','')
-        t=t.replace('</p>','')
-    return t
+
 
 
 #读取txt文档,可以兼容不同的编码方式
@@ -141,34 +173,71 @@ def runcmdstr(cmdstr):
     tmp.close()# 需将对象关闭
     return res
 
+# 1213修改
+def randfileeee(valarr="",fkey="",flag="new"):
 
-def randfile(valarr="",fkeyold="",flag="new"):
     #print("randfile---"+"fkeyold:"+fkeyold+"flag:"+flag)
     #print(valarr)
     #print("valarr---")
     nowpath= str(os.getcwd()) + "/"
     
-    if fkeyold=="":
-        return nowpath+ str(int(round(time.time() * 1000)))+".tmp"
+    if fkey=="":
+        return ""
     
     try:
-        f=valarr[fkeyold]
+        f=valarr[fkey]
     except:
-        return nowpath + str(int(round(time.time() * 1000)))+".tmp"
+        return ""
 
 
+    random_number = random.randint(0, 1000)
     fex=os.path.splitext(f)[-1]
     #print("fex---"+" fex:"+fex+" flag:"+flag)
     if flag=="new":
         #print("flag in ")
-        return nowpath + str(int(round(time.time() * 1000)))+".tmpnew"+fex
+        return nowpath + str(int(round(time.time() * 1000))+random_number)+".tmpnew"+fex
     else:
         #print("flag not in ")
-        return nowpath + str(int(round(time.time() * 1000)))+".tmp"+fex
+        return nowpath + str(int(round(time.time() * 1000))+random_number)+".tmp"+fex
 
-    path =nowpath + str(int(round(time.time() * 1000)))+".tmp"
-    return path
-            
+#输入中文
+def paste_text(text):
+    pyperclip.copy(text)
+    pyautogui.hotkey('ctrl', 'v')
+    time.sleep(0.1)
+#输入英文
+def type_english(text):
+    pyautogui.typewrite(text)
+    time.sleep(0.1)
+ 
+def randfile(valarr="",key="",flag="new"):
+    #print("randfile---"+"key:"+key+"flag:"+flag)
+    #print(valarr)
+    #print("valarr---")
+    nowpath= str(os.getcwd()) + "/"
+    
+    if key=="":
+        return nowpath+ str(int(round(time.time() * 1000)))+".tmp"
+    
+    
+    try:
+        f=valarr[key]
+    except Exception as e:
+        print("---------- 执行出错，请检查! ---------\n"+traceback.format_exc())
+        return nowpath + str(int(round(time.time() * 1000)))+".tmp"
+
+
+    random_number = random.randint(0, 1000)
+    fex=os.path.splitext(f)[-1]
+    #print("fex---"+" fex:"+fex+" flag:"+flag)
+    if flag=="new":
+        #print("flag in ")
+        return nowpath + str(int(round(time.time() * 1000))+random_number)+".tmpnew"+fex
+    else:
+        #print("flag not in ")
+        return nowpath + str(int(round(time.time() * 1000))+random_number)+".tmp"+fex
+
+        
 
 """ 等待脚本执行结束 """
 def runwait(cmd):
@@ -208,7 +277,7 @@ def safedeltmpfile(tt=300):
                     if nowtime-mtime >tt:
                         if os.path.exists(filepath):
                             os.remove(filepath)
-                except Exception as e:# 保存函数出错后的执行结果
+                except Exception as e:# 保存函数出错后的执行 结果
                     errstr = '错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e)
                     #print(errstr)
     return errstr
@@ -364,7 +433,7 @@ def savearr2json(arr,wtype="all",code="0"):
 
 
 """ 错误执行时存到json """
-def saveerr2json(arr,s="",key="执行结果",):
+def saveerr2json(arr,s="",key="execstat",):
     arr[key]=s
     savearr2json(arr,"all")
     print("函数savearr2json print: "+s)
@@ -501,7 +570,11 @@ def getwholepath(raltiveapth,folder=""):
         new_file = raltiveapth
     else:
         new_file = folder+"\\"+raltiveapth
-    #print(new_file)
+        if os.path.exists(folder+"\\"+raltiveapth):
+            new_file = folder+"\\"+raltiveapth
+        else:
+            new_file = raltiveapth
+
     return new_file
 
 
@@ -527,10 +600,19 @@ def getexepath(jbname):
             return  jbpath
     return  "JbNotExist"  #都找不到，就返回空
 
+def printtraceback(valarr,errstr="错误输出值",prflag=True):
+    valarr["execstat"]=errstr
+    if prflag==True :
+        print(errstr++traceback.format_exc())
+    return valarr
 
+def printstrtraceback(errstr="错误输出值",prflag=True):
+    if prflag==True :
+        print(errstr+traceback.format_exc())
+    return valarr
 
 def printvalarr(valarr,errstr="错误输出值",prflag=True):
-    valarr["执行结果"]=errstr
+    valarr["execstat"]=errstr
     if prflag==True :
         print(errstr)
     return valarr
@@ -541,7 +623,7 @@ def getvalarr(jsonarr,inarr,outarr,prflag="false"):
     #计算出contarr
     contarr=jsonarr["contents"]
     contarr=dictdiff(contarr,outarr)
-    temparr["执行结果"]=""
+    temparr["execstat"]=""
     contarr=dictdiff(contarr,temparr)
     
     key=getonlykey(contarr)
@@ -579,8 +661,8 @@ def getonlykey(arr):
 def mboutputarr(fd2,prflag="true",arr2ret={},f64="",wpath="",keyflag="all"):
     #一、 是否有函数的输入
     #titlepr("运行后的返回值：",arr2ret,prflag)    
-    if "执行结果" not in arr2ret:  
-        arr2ret["执行结果"] = "√"
+    if "execstat" not in arr2ret:  
+        arr2ret["execstat"] = "√"
     
     if fd2=={}:
         savearr2json(arr2ret, keyflag)
@@ -617,6 +699,7 @@ def getfd2(fd2={},flag="json64",path=""):
             except:
                 json64=fd2.json64
         return json64
+
     elif flag=="f64":
 
         if fd2=={} and path !="":#看是否函数传入
@@ -631,24 +714,55 @@ def getfd2(fd2={},flag="json64",path=""):
                     f64=""
 
         return f64
+    elif flag=="infilename":
+
+        if fd2=={}:#看是否函数传入
+            try:
+                infilename=fd2["infilename"]
+            except:
+                infilename=fd2.infilename
+        else:
+            try:
+                infilename=path
+            except:
+                infilename=""
+
+        return infilename
     else:
         return "getfd2arr未知错误。"
 
-#获取fd2的字典
+#获取fd2的字典 20231215修改
 def getfd2_f64(fd2={},fkeyold="",jsonarr={}):
     f64=""
-    if fd2=={} and fkeyold !="":#看是否函数传入
-        inpath=jsonarr["contents"][fkeyold]
-        f64=readfile2f64(inpath)
-        return f64
-    elif fd2!={}:
+
+    if fd2!={}:
+
         try:
-            f64=fd2["f64"]
-        except:
             try:
-                f64=fd2.f64
+                f64=fd2["f64"]
             except:
-                f64=""
+                try:
+                    f64=fd2.f64
+                except:
+                    f64=""
+
+            if f64=="":
+                try:
+                    inpath=jsonarr["contents"][fkeyold]
+                    f64=readfile2f64(inpath)
+                except:
+                    f64=""
+        except:
+            f64=""
+
+        return f64
+    elif fkeyold !="":#看是否函数传入, 是excel传入
+        try:
+            inpath=jsonarr["contents"][fkeyold]
+            f64=readfile2f64(inpath)
+
+        except:
+            f64=""
 
         return f64
     elif fd2=={} and fkeyold =="":#看是否函数传入

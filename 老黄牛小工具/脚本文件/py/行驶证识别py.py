@@ -78,8 +78,8 @@ def main(fd2={}):
     
     # ----------------[4/4]调用函数并生成arr2ret及f64 -------------------
     try:  # 运行函数,最后要生成arr2ret及f64
-        old_filepath=lilyfun.randfile(valarr,fkeyold,"old")
-        new_filepath=lilyfun.randfile(jsoncontentarr,fkeynew,"new")
+        old_filepath=lilyfun.randfile(inarr,fkeyold,"old")
+        new_filepath=lilyfun.randfile(outarr,fkeynew,"new")
         old_filepath=lilyfun.writefile64(f64,old_filepath)
     except:  # 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]读写文件错误。",prflag)

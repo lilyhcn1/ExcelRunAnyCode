@@ -1,95 +1,77 @@
 ﻿#一、 引用函数、库等写在最上方
 #11111111111111111111111111111111111111111111111111111111111111
 import requests
+import pycurl
+from io import BytesIO
 
-def get_website_title(url):
+def get_website_title(url):   
     try:
-        response = requests.get(url, timeout=3)
-        if response.status_code == 200:
-            # 获取网页内容的文本
-            html_content = response.text
-            # 从文本中提取网页标题
-            start_index = html_content.find('<title>')
-            end_index = html_content.find('</title>')
-            title = html_content[start_index + 7:end_index]
-        
-            return title
-        else:
-            return "请求失败"
-    except requests.Timeout:
-        # 处理请求超时的情况
-        return "请求超时"
-    except requests.RequestException as e:
+        html_content=fetch_data(url)
+        # 从文本中提取网页标题
+        start_index = html_content.find('<title>')
+        end_index = html_content.find('</title>')
+        title = html_content[start_index + 7:end_index]
+        return title
+    
+    except BaseException as e:
         # 处理其他请求异常
         return "请求异常:"+ e
-def webcontent(url):
+    
+def webcontent(url):  
     try:
-        response = requests.get(url, timeout=3)
-        if response.status_code == 200:
-            # 获取网页内容的文本
-            html_content = response.text
+        html_content=fetch_data(url)
 
-        
-            return html_content
-        else:
-            return "请求失败"
-    except requests.Timeout:
-        # 处理请求超时的情况
-        return "请求超时"
-    except requests.RequestException as e:
-        # 处理其他请求异常
-        return "请求异常:"+ e  
+        return html_content
 
-def webstate(url):
-    try:
-        response = requests.get(url, timeout=3)
-        if response.status_code == 200:
-            # 获取网页内容的文本
-            html_content = response.text
-            # 从文本中提取网页标题
-            start_index = html_content.find('<title>')
-            end_index = html_content.find('</title>')
-            title = html_content[start_index + 7:end_index]
-            title= "站点："+url+"\n标题："+title
-            return title
-        else:
-            return "请求失败"
-    except requests.Timeout:
-        # 处理请求超时的情况
-        return "请求超时"
-    except requests.RequestException as e:
+    except BaseException as e:
         # 处理其他请求异常
         return "请求异常:"+ e
 
-import multiprocessing
-import time
-
-def execute_with_timeout(func,timeout=3, *args, **kwargs):
-    queue = multiprocessing.Queue()
-    process = multiprocessing.Process(target=func_wrapper, args=(func, queue, *args), kwargs=kwargs)
-    process.start()
-    process.join(timeout)
-    
-    if process.is_alive():
-        process.terminate()
-        return "执行超时"
-    
-    result = queue.get()
-    return result
-
-def func_wrapper(func, queue, *args, **kwargs):
+def webstate(url):  
     try:
-        result = func(*args, **kwargs)
-        queue.put(result)
-    except Exception as e:
-        queue.put(f"执行失败: {str(e)}")
+        html_content=fetch_data(url)
+        # 从文本中提取网页标题
+        start_index = html_content.find('<title>')
+        end_index = html_content.find('</title>')
+        title = html_content[start_index + 7:end_index]
+        title= "站点："+url+"\n标题："+title
+        print(title)
+        return title
+
+    except BaseException as e:
+        # 处理其他请求异常
+        return "请求异常:"+ e
 
 
+def fetch_data(url, timeout_seconds=3, proxy=None):
+
+    buffer = BytesIO()
+    c = pycurl.Curl()
+    c.setopt(c.URL, url)
+    c.setopt(c.USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3')
+    # 设置连接超时为3秒
+    c.setopt(c.CONNECTTIMEOUT, timeout_seconds)
+    if proxy:
+        c.setopt(pycurl.PROXY, proxy)
+    # 设置整个请求的超时时间为3秒
+    c.setopt(c.TIMEOUT, timeout_seconds)
+    c.setopt(c.WRITEDATA, buffer)
+
+    try:
+        c.perform()
+    except pycurl.error as e:
+        return "请求超时 "
+
+    c.close()
+
+    body = buffer.getvalue()
+
+    return body.decode('utf-8')
 
 
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
-import os,base64,time,sys,json,lilyfun # 导入同路径下的函数
+import os,base64,time,sys,json,traceback,lilyfun # 导入同路径下的函数
 prflag = "true"  # 是否打印输出，true输出
 inarr,outarr={},{}
 lilyfun.tj()
@@ -127,12 +109,11 @@ def main(fd2={}):
     # ----------------[1/4]读取fd2，生成base64字符串 json64 -----
     try: #1.1读取fd2，即传入字典
         json64=lilyfun.getfd2(fd2,"json64")
-    except:
-        #errarr["执行结果"]="读取fd2错误，请检查！"
-        errarr = lilyfun.printvalarr(errarr,"读取fd2错误，请检查！",prflag)
+    except Exception as e:
+        errarr = lilyfun.printtraceback(errarr,"读取fd2错误，请检查！",prflag)
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("[1/4] fd2 传入成功！：","传入成功",prflag)
-    
+
     # ----------------[2/4] 生成f64,json64解码为jsonarr -----------
     try: #1.2 json64解码为jsonarr
         jsonarr = lilyfun.json64tojsonarr(json64)
@@ -140,8 +121,8 @@ def main(fd2={}):
         jsoncontentarr=lilyfun.updatearrfromini(jsoncontentarr,config)
         jsonarr["contents"]=jsoncontentarr
         f64=lilyfun.getfd2_f64(fd2,fkeyold,jsonarr)
-    except:
-        errarr = lilyfun.printvalarr(errarr,"jsonarr解码错误，请检查！",prflag)
+    except Exception as e:
+        errarr = lilyfun.printtraceback(errarr,"jsonarr解码错误，请检查！",prflag)
         #fd2:函数传过来的值，arr2ret:运行得到的数组，prflag：打印标记
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("[2/4] 解码成功 jsonarr：",jsonarr,prflag)
@@ -149,8 +130,8 @@ def main(fd2={}):
     # ----------------[3/4]按输入区读传过来的值并反馈到字典valarr ------
     try:
         valarr=lilyfun.getvalarr(jsonarr,inarr,outarr,prflag)
-    except:
-        errarr = lilyfun.printvalarr(errarr,"[读输入]标题行没有需要的值，请确保标题行存在。",prflag)
+    except Exception as e:
+        errarr = lilyfun.printtraceback(errarr,"标题行没有需要的值，请确保标题行存在！",prflag)
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("","获取到的f64的长度为: " + str(len(f64)),prflag)
     lilyfun.titlepr("[3/4] 检查输入值成功 valarr：",valarr,prflag)
@@ -158,11 +139,11 @@ def main(fd2={}):
     
     # ----------------[4/4]调用函数并生成arr2ret及f64 -------------------
     try:  # 运行函数,最后要生成arr2ret及f64
-        old_filepath=lilyfun.randfile(inarr,fkeyold,"old")
-        new_filepath=lilyfun.randfile(outarr,fkeynew,"new")
+        old_filepath=lilyfun.randfile(errarr,fkeyold,"old")
+        new_filepath=lilyfun.randfile(errarr,fkeynew,"new")
         old_filepath=lilyfun.writefile64(f64,old_filepath)
-    except:  # 保存函数出错后的执行结果
-        valarr = lilyfun.printvalarr(valarr,"[运行]读写文件错误。",prflag)
+    except Exception as e:
+        valarr = lilyfun.printtraceback(valarr,"读写文件错误，请检查！",prflag)
         return lilyfun.mboutputarr(fd2,prflag,valarr)
 
 
@@ -173,24 +154,12 @@ def main(fd2={}):
     #fkeyold  fkeynew  
     try:  # 运行函数,最后要生成arr2ret及f64
 
-        arr2ret["标题"]=execute_with_timeout(webstate, url=valarr["url"])
+        arr2ret["标题"]=webstate(valarr["url"])
 
 
     except Exception as e:# 保存函数出错后的执行结果
         valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
         return lilyfun.mboutputarr(fd2,prflag,valarr)
-
-
-
-
-
-    except Exception as e:# 保存函数出错后的执行结果
-        valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
-        return lilyfun.mboutputarr(fd2,prflag,valarr)
-
-
-
-
     #3333333333333333333333333333333333333333333333333333
     
     try:  # 运行函数,最后要生成arr2ret及f64
@@ -200,9 +169,9 @@ def main(fd2={}):
         #     lilyfun.writefile64(f64,newpath)
         lilyfun.safedel(old_filepath)
         lilyfun.safedel(new_filepath)
-        arr2ret["执行结果"]="√"
-    except:  # 保存函数出错后的执行结果
-        valarr = lilyfun.printvalarr(valarr,"[执行函数后]读写、删除文件错误。",prflag)
+        arr2ret["execstat"]="√"
+    except Exception as e:
+        valarr = lilyfun.printtraceback(valarr,"读写、删除文件错误。！",prflag)
         return lilyfun.mboutputarr(fd2,prflag,valarr)
     lilyfun.titlepr("[4/4] 函数执行成功 arr2ret：",arr2ret,prflag)
     
@@ -217,10 +186,9 @@ def main(fd2={}):
         #这是最关键的返回函数，并写入文件
         #print(wholepath)
         return lilyfun.mboutputarr(fd2,prflag,arr2ret,f64,wholepath,"key")
-    except:  # 保存函数出错后的执行结果
-        valarr = lilyfun.printvalarr(valarr,"写入文件出错，请检查值是否正确。",prflag)
-        #lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)      
-        print("最后写入文件出错，请检查值是否正确。\n"+traceback.format_exc())  
+    except Exception as e:
+        valarr = lilyfun.printtraceback(valarr,"写入文件出错，请检查值是否正确！",prflag)
+        lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)       
         return lilyfun.mboutputarr(fd2,prflag,valarr)
 
 
@@ -237,5 +205,3 @@ if __name__ == '__main__':
         #fd2:传过来的值，prflag：打印标记,keyflag:excel中的是否全部输出
         #arr2ret:运行得到的字典，f64:反馈文件的base64,fkeynew：输出值
         #return lilyfun.mboutputarr(fd2,prflag,errarr)
-
-

@@ -385,8 +385,12 @@ return t
 tr(ByRef s){
   ;TrayTip #1, %s%
   TrayTip , 老黄牛小工具, %s%
+
   
 }
+
+
+
 ; 函数：get方式获取返回值
 utf8readtext(ByRef path){
 FileRead, t, *P65001 %path%
@@ -1142,6 +1146,23 @@ PostCsvAndFile(ByRef url,ByRef fkeyold,ByRef fkeynew){
     creatfolderbyfile(newfilepath)
     writeBase64File(newfilepath,data.f64)
   }
+}
+; 上传文件到execelquery服务器
+excelqueryuploadfile(url, filespath){
+    IfExist % filespath
+    
+    {
+        ;objParam := {"files":[filespath], "conall":conall, "nowfield":nowfield} ;post数据
+        objParam := {"files":[filespath]} ;post数据
+        CreateFormData(PostData, hdr_ContentType, objParam)
+        whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        whr.SetTimeouts("300000", "300000", "300000", "300000")
+        whr.Open("POST", url, true) ;地址
+        whr.SetRequestHeader("Content-Type", hdr_ContentType)
+        whr.Send(PostData)
+        whr.WaitForResponse()
+        return whr.ResponseText
+    }
 }
 
 

@@ -2,7 +2,7 @@
 <customUI xmlns='http://schemas.microsoft.com/office/2009/07/customui' loadImage='LoadImage' onLoad='Ribbon_Load'>
 	<ribbon startFromScratch="false">
 		<tabs>
-			<tab id="tab0" label="老黄牛小工具" >
+			<tab id="tab0" label="老黄牛工具" >
 				<group id="grp0" label="脚 本 调 用">
 					<box id="box1">
 						<button id="btntest" image="lib"/>
@@ -10,10 +10,19 @@
 					</box>
 					<button id="btn2" size="normal" image="script" label="立即执行脚本" onAction="DoScript"/>
 					<button id="btn3" size="normal" image="btn" label="添加按钮至Sheet" onAction="addButton"/>
-
+					<button id="批量功能" size="normal" image="教程" label="批量功能" onAction="MainButtonAction" />
+					<button id="功能级联" size="normal" image="教程" label="功能级联" onAction="MainButtonAction" />					
 				</group>
-
-
+				<group id="grp1" label="功能列表区">
+					<toggleButton id ="tb1" size="large" label="是否添加按钮" getImage="GetImage" getPressed="GetPressed" onAction="buttonclick"/>
+					<dynamicMenu id="外部API" size="large" image="outapi" label="外部API" getContent="getContent"/>
+					<dynamicMenu id="自建API" size="large" image="wapi" label="自建API" getContent="getContent"/>
+					<dynamicMenu id="系统功能" size="large" image="system" label="系统功能" getContent="getContent"/>
+					<dynamicMenu id="表格增强" size="large" image="excel" label="表格增强" getContent="getContent"/>
+					<dynamicMenu id="文件管理" size="large" image="文件管理" label="文件管理" getContent="getContent"/>
+					<dynamicMenu id="代码生成" size="large" image="代码生成" label="代码生成" getContent="getContent"/>					
+					<dynamicMenu id="调试设定" size="large" image="调试设定" label="调试设定" getContent="getContent"/>
+				</group>
 				<group id="grp20" label="数据录入">
 					
 					<button id="上传附件" size="large" image="上传附件" label="上传附件" onAction="MainButtonAction" />
@@ -31,8 +40,6 @@
 					<button id="打印文件" size="normal" image="打印文件" label="打印文件" onAction="MainButtonAction" />
 					<button id="建超链接" size="normal" image="建超链接" label="建超链接" onAction="MainButtonAction" />
 					
-					<button id="删超链接" size="normal" image="删超链接" label="删超链接" onAction="MainButtonAction" />
-					<button id="管理教程" size="normal" image="教程" label="管理教程" onAction="MainButtonAction" />
 				</group>
 				
 				<group id="grp30" label="数据共享">
@@ -41,13 +48,16 @@
 					<button id="主表下载数据" size="normal" image="主表下载数据" label="主表下载数据" onAction="MainButtonAction" />
 					<button id="转成相对路径" size="normal" image="转成相对路径" label="转成相对路径" onAction="MainButtonAction" />
 					<button id="网络表格" size="normal" image="网络表格" label="网络表格" onAction="MainButtonAction" />
-					<button id="共享教程" size="normal" image="教程" label="共享教程" onAction="MainButtonAction" />
 				</group>
-
+				<group id="grp40" label="发送消息代码">
+					<button id="初始化简单代码生成器" size="large" image="初始化表格" label="发消息表格" onAction="MainButtonAction" />
+				</group>		
 				<group id="grp99" label="功能网站">
-					<button id="访问网站" size="large" image="访问网站" label="访问网站" onAction="navigateweb" />
-					<button id="菜单切换" size="large" image="菜单切换" label="菜单切换" onAction="MainButtonAction" />
+					<button id="访问网站" size="normal" image="访问网站" label="访问网站" onAction="navigateweb" />
+					<button id="菜单切换" size="normal" image="菜单切换" label="菜单切换" onAction="MainButtonAction" />
+
 				</group>
+		
 			</tab>
 		</tabs>
 	</ribbon>

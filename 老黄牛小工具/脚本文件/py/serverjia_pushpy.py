@@ -27,7 +27,7 @@ def send_message(sendkey, title, desp=''):
 #11111111111111111111111111111111111111111111111111111111111111
 # ---------------r34.cc制作 excel 的输入输出---------------
 import os,base64,time,sys,json,traceback,lilyfun # 导入同路径下的函数
-prflag = "true"  # 是否打印输出，true输出
+prflag = True  # 是否打印输出，true输出
 inarr,outarr={},{}
 lilyfun.tj()
 
@@ -53,7 +53,6 @@ inarr=lilyfun.updatearrfromini(inarr,config)
 
 
 
-
 def main(fd2={}):
     global inarr,outarr,prflag,fkeyold,fkeynew,mlkey,config
     arr2ret,valarr,errarr = {},{},{}
@@ -65,7 +64,7 @@ def main(fd2={}):
     try: #1.1读取fd2，即传入字典
         json64=lilyfun.getfd2(fd2,"json64")
     except Exception as e:
-        errarr = lilyfun.printtraceback(errarr,"读取fd2错误，请检查！",prflag)
+        errarr = lilyfun.printtraceback(errarr,"读取fd2错误，请检查！",e,prflag)
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("[1/4] fd2 传入成功！：","传入成功",prflag)
 
@@ -76,17 +75,17 @@ def main(fd2={}):
         jsoncontentarr=lilyfun.updatearrfromini(jsoncontentarr,config)
         jsonarr["contents"]=jsoncontentarr
         f64=lilyfun.getfd2_f64(fd2,fkeyold,jsonarr)
-    except Exception as e:
-        errarr = lilyfun.printtraceback(errarr,"jsonarr解码错误，请检查！",prflag)
+    except Exception as e:# 保存函数出错后的执行结果
+        errarr = lilyfun.printtraceback(errarr,"jsonarr解码错误，请检查！",e,prflag)
         #fd2:函数传过来的值，arr2ret:运行得到的数组，prflag：打印标记
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("[2/4] 解码成功 jsonarr：",jsonarr,prflag)
 
     # ----------------[3/4]按输入区读传过来的值并反馈到字典valarr ------
     try:
-        valarr=lilyfun.getvalarr(jsonarr,inarr,outarr,prflag)
+        valarr=lilyfun.getvalarr(jsonarr,inarr,outarr,prflag,fkeyold,fkeynew)
     except Exception as e:
-        errarr = lilyfun.printtraceback(errarr,"标题行没有需要的值，请确保标题行存在！",prflag)
+        errarr = lilyfun.printtraceback(errarr,"标题行没有需要的值，请确保标题行存在！",e,prflag)
         return lilyfun.mboutputarr(fd2,prflag,errarr)
     lilyfun.titlepr("","获取到的f64的长度为: " + str(len(f64)),prflag)
     lilyfun.titlepr("[3/4] 检查输入值成功 valarr：",valarr,prflag)
@@ -98,7 +97,7 @@ def main(fd2={}):
         new_filepath=lilyfun.randfile(errarr,fkeynew,"new")
         old_filepath=lilyfun.writefile64(f64,old_filepath)
     except Exception as e:
-        valarr = lilyfun.printtraceback(valarr,"读写文件错误，请检查！",prflag)
+        valarr = lilyfun.printtraceback(valarr,"读写文件错误，请检查！",e,prflag)
         return lilyfun.mboutputarr(fd2,prflag,valarr)
 
 
@@ -112,11 +111,11 @@ def main(fd2={}):
         arr2ret["state"]=send_message(valarr["sendkey"],valarr["title"],valarr["desp"])
 
 
-    except Exception as e:# 保存函数出错后的执行结果
-        valarr = lilyfun.printvalarr(valarr,"[运行]调用函数出错，请检查值是否正确。" +"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
-        return lilyfun.mboutputarr(fd2,prflag,valarr)
     #3333333333333333333333333333333333333333333333333333
-    
+    except Exception as e:# 保存函数出错后的执行结果
+        valarr = lilyfun.printtraceback(valarr,"[运行]调用函数出错，请检查值是否正确。",e,prflag)
+        return lilyfun.mboutputarr(fd2,prflag,valarr)
+
     try:  # 运行函数,最后要生成arr2ret及f64
         f64=lilyfun.readfile2f64(new_filepath)#有新文件就读取
         # newpath = valarr[fkeynew]
@@ -126,11 +125,10 @@ def main(fd2={}):
         lilyfun.safedel(new_filepath)
         arr2ret["execstat"]="√"
     except Exception as e:
-        valarr = lilyfun.printtraceback(valarr,"读写、删除文件错误。！",prflag)
+        valarr = lilyfun.printtraceback(valarr,"读写、删除文件错误。！",e,prflag)
         return lilyfun.mboutputarr(fd2,prflag,valarr)
     lilyfun.titlepr("[4/4] 函数执行成功 arr2ret：",arr2ret,prflag)
     
-
     # ----------------五、写入文件，并返回字典 -------------------
     try:  # 写入文件
         if fd2=={} and fkeynew !="":
@@ -142,11 +140,9 @@ def main(fd2={}):
         #print(wholepath)
         return lilyfun.mboutputarr(fd2,prflag,arr2ret,f64,wholepath,"key")
     except Exception as e:
-        valarr = lilyfun.printtraceback(valarr,"写入文件出错，请检查值是否正确！",prflag)
+        valarr = lilyfun.printtraceback(valarr,"写入文件出错，请检查值是否正确！",e,prflag)
         lilyfun.titlepr("最后写入文件出错，请检查值是否正确。","",prflag)       
         return lilyfun.mboutputarr(fd2,prflag,valarr)
-
-
 
 if __name__ == '__main__':
     main()
@@ -160,3 +156,4 @@ if __name__ == '__main__':
         #fd2:传过来的值，prflag：打印标记,keyflag:excel中的是否全部输出
         #arr2ret:运行得到的字典，f64:反馈文件的base64,fkeynew：输出值
         #return lilyfun.mboutputarr(fd2,prflag,errarr)
+

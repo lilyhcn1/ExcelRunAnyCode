@@ -29,7 +29,9 @@
 					
 					<button id="最小化_截图jpg_表格网络上传文件" size="normal" image="截图上传" label="截图上传" onAction="MainButtonAction" />
 					<button id="剪贴板上传" size="normal" image="剪贴板上传" label="剪贴板上传" onAction="MainButtonAction" />
-					<button id="初始化表格" size="normal" image="初始化表格" label="初始化表格" onAction="MainButtonAction" />
+					<button id="剪贴板仅上传" size="normal" image="剪贴板仅上传" label="剪贴板仅上传" onAction="MainButtonAction" />
+"MainButtonAction" />
+				
 				</group>
 
 
@@ -37,9 +39,8 @@
 					<button id="查看文件" size="large" image="查看文件" label="查看文件" onAction="MainButtonAction" />
 					
 					<button id="复制到剪贴板" size="normal" image="复制到剪贴板" label="复制到剪贴板" onAction="MainButtonAction" />
-					<button id="打印文件" size="normal" image="打印文件" label="打印文件" onAction="MainButtonAction" />
 					<button id="建超链接" size="normal" image="建超链接" label="建超链接" onAction="MainButtonAction" />
-					
+					<button id="初始化表格" size="normal" image="初始化表格" label="初始化表格" onAction="MainButtonAction" />						
 				</group>
 				
 				<group id="grp30" label="数据共享">

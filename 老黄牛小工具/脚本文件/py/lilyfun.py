@@ -9,7 +9,7 @@ from urllib import request
 import urllib.parse
 import os,os.path,json,sys
 import requests
-import time
+import time,re
 import base64
 import configparser
 import chardet,time,subprocess
@@ -18,6 +18,8 @@ from datetime import datetime
 import random
 import pyautogui,pyperclip
 import traceback
+import json
+import chardet
 
 
 
@@ -117,7 +119,7 @@ def readjson(key="contents"):
         if ct.startswith(u'\ufeff'):
             ct = ct.encode('utf8')[3:].decode('utf8')
             #ct = ct.replace('\\','\\\\')
-    jsonarr = json.loads(ct)
+    jsonarr = json.loads(fix_invalid_unicode(ct))
     #print(key in jsonarr.keys())
     if key in jsonarr.keys():
         listarr = jsonarr[key]
@@ -305,7 +307,7 @@ def readjsonarr(key="",key2=""):
         if ct.startswith(u'\ufeff'):
             ct = ct.encode('utf8')[3:].decode('utf8')
             #ct = ct.replace('\\','\\\\')
-    jsonarr = json.loads(ct)
+    jsonarr = json.loads(fix_invalid_unicode(ct))
     
     
 
@@ -399,12 +401,12 @@ def checkkey(arr,key):
         sys.exit()
         
 """ 打印输出信息 """
-def pr(str,prflag="true"):
-    if prflag=="true":
+def pr(str,prflag=True):
+    if prflag==True:
         print(str)
 """ 打印输出信息 """
-def titlepr(title,arr,prflag="true"):
-    if prflag=="true":
+def titlepr(title,arr,prflag=True):
+    if prflag==True:
         if title !="":
             print("                         ----------- " + title + " -----------")
             print(arr)
@@ -419,6 +421,7 @@ def arrstr(arr,key,s=""):
     else:
         arr[key]=s
         return arr
+
 
 
 
@@ -455,10 +458,39 @@ def arr2json64str(arr,wtype="all",code="0"):
     jsonstr=json.dumps(arr)
     return str2f64(jsonstr)  
 
+
+def fix_invalid_unicode(json_bytes):
+    # 将字节对象转换为字符串
+    json_str = json_bytes.decode('utf-8', errors='replace')
+    # 使用正则表达式替换无效的 Unicode 转义序列
+    fixed_str = re.sub(r'\\u([0-9a-fA-F]{0,3}[^0-9a-fA-F])', r'\\u000\1', json_str)
+    return fixed_str
+
+
+
+def lilyjsonloadsbyte(s):
+    # 检测byte的编码
+    detected_encoding = chardet.detect(s)['encoding']
+    # 解码字符串并转换为 Python 字符串
+    decoded_string = s.decode(detected_encoding)
+    # 使用 json.loads() 解码 JSON 数据
+    decoded_json = json.loads(decoded_string)
+    return decoded_json
+
+def lilyjsonloads(s):
+    # 如果字符串以 BOM 开头，则移除 BOM
+    if s.startswith('\ufeff'):
+        s = s[1:]
+    # 使用 json.loads() 解码 JSON 数据
+    decoded_json = json.loads(s)
+    return decoded_json
+
+
 """ base64转成jsonarr """
 def json64tojsonarr(json64):
     json64str=base64.b64decode(json64) #??原来写成fd2.json64
-    jsonarr = json.loads(json64str)
+    json64str=fix_invalid_unicode(json64str)
+    jsonarr = lilyjsonloads(json64str)
     return jsonarr
 
 
@@ -539,7 +571,7 @@ def upload(path):
     url = 'https://sm.ms/api/v2/upload'
     res = requests.post(url, files=files, headers=headers).json()
     aa=json.dumps(res, indent=4)
-    aa=json.loads(aa)
+    aa=json.loads(fix_invalid_unicode(aa))
     successstr = aa['success']
     #print(successstr)
     if  successstr == False:
@@ -600,10 +632,10 @@ def getexepath(jbname):
             return  jbpath
     return  "JbNotExist"  #都找不到，就返回空
 
-def printtraceback(valarr,errstr="错误输出值",prflag=True):
+def printtraceback(valarr,errstr="错误输出值",e="",prflag=True):
     valarr["execstat"]=errstr
     if prflag==True :
-        print(errstr++traceback.format_exc())
+        print(errstr+"\n"+'错误类型：'+ e.__class__.__name__+"\n"+ '错误明细：'+str(e))
     return valarr
 
 def printstrtraceback(errstr="错误输出值",prflag=True):
@@ -618,9 +650,14 @@ def printvalarr(valarr,errstr="错误输出值",prflag=True):
     return valarr
 
 #读取输入的数组
-def getvalarr(jsonarr,inarr,outarr,prflag="false"):
+def getvalarr(jsonarr,inarr,outarr,prflag="false",fkeyold="",fkeynew=""):
     valarr,contarr,temparr={},{},{}
     #计算出contarr
+
+    temp={}
+    temp[fkeynew]=""
+    inarr=dictdiff(inarr,temp)
+    
     contarr=jsonarr["contents"]
     contarr=dictdiff(contarr,outarr)
     temparr["execstat"]=""
@@ -658,7 +695,7 @@ def getonlykey(arr):
 
 
 #处理计算得到的数组
-def mboutputarr(fd2,prflag="true",arr2ret={},f64="",wpath="",keyflag="all"):
+def mboutputarr(fd2,prflag=True,arr2ret={},f64="",wpath="",keyflag="all"):
     #一、 是否有函数的输入
     #titlepr("运行后的返回值：",arr2ret,prflag)    
     if "execstat" not in arr2ret:  

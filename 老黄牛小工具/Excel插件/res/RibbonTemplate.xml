@@ -30,7 +30,6 @@
 					<button id="最小化_截图jpg_表格网络上传文件" size="normal" image="截图上传" label="截图上传" onAction="MainButtonAction" />
 					<button id="剪贴板上传" size="normal" image="剪贴板上传" label="剪贴板上传" onAction="MainButtonAction" />
 					<button id="剪贴板仅上传" size="normal" image="剪贴板仅上传" label="剪贴板仅上传" onAction="MainButtonAction" />
-"MainButtonAction" />
 				
 				</group>
 
